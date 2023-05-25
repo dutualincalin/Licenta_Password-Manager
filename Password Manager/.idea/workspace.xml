@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="419957ad-905a-44e9-bcb9-9cd37a6924b1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/PasswordManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/mapper/PasswordMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/model/PasswordParams.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/GenerationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/ManagementService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/ParamSyncService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/RecoveryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/PasswordManager/utility/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/PasswordManager/MainTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Plan licenta.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../Plan licenta.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SOTA schita.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../SOTA schita.docx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2QI11L1VvhC2y4zotDJo6FJRUKz" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Java",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="PasswordManager" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="PasswordManager" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.PasswordManager.PasswordManager" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="419957ad-905a-44e9-bcb9-9cd37a6924b1" name="Changes" comment="" />
+      <created>1685026064695</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1685026064695</updated>
+      <workItem from="1685026066629" duration="7329000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
