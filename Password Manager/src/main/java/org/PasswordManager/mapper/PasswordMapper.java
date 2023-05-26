@@ -1,10 +1,9 @@
 package org.PasswordManager.mapper;
 
-import org.PasswordManager.utility.Utils;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.mapstruct.factory.Mappers;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,7 +14,7 @@ import java.util.Base64;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
     injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface PasswordMapper {
-
+    PasswordMapper instance = Mappers.getMapper(PasswordMapper.class);
 
     default String imageToBase64String(BufferedImage image, String type) {
         String imageString = null;
@@ -32,18 +31,5 @@ public interface PasswordMapper {
             e.printStackTrace();
         }
         return imageString;
-    }
-
-    default String pngImageToHash(BufferedImage image) {
-        String imageString = imageToBase64String(image, "png");
-
-        Pbkdf2PasswordEncoder pbkdf2PasswordEncoder =  new Pbkdf2PasswordEncoder(
-            "reganaMdrowssaP",
-            Utils.pbkdf2Iterations,
-            Utils.pbkdf2Length
-        );
-
-        pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
-        return pbkdf2PasswordEncoder.encode(imageString);
     }
 }

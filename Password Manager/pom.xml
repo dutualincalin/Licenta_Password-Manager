@@ -14,7 +14,7 @@
   <name>PasswordManager</name>
   <description>PasswordManager</description>
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
   </properties>
 
@@ -78,6 +78,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>1.70</version>
     </dependency>
 
   </dependencies>
