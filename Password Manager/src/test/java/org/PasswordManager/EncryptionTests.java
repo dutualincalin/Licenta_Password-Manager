@@ -1,6 +1,6 @@
 package org.PasswordManager;
 
-import org.PasswordManager.model.PasswordParams;
+import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.service.EncryptionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +32,31 @@ public class EncryptionTests {
 
     @Test
     public void checkPasswordHashing() {
-        PasswordParams passParams = new PasswordParams(
-            "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==",
-            "NotIdealForYOU",
+        PasswordMetadata passParams = new PasswordMetadata(
             "www.google.com"
         );
 
         passParams.setUsername("CheckyCheckyCheckCheck");
         passParams.setVersion(3);
 
-        System.out.println(encryptionService.encryptObject(passParams));
+        System.out.println(encryptionService.encryptPassword(
+            "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==",
+            passParams,
+            "NotIdealForYOU")
+        );
+    }
+
+    @Test
+    public void checkJSONAESHashing(){
+        String testString = "{\n" +
+            "\tfield1: test_value1,\n" +
+            "\tfield2: [field2_1:test_value2_1, field2_2:test_value2_2]\n" +
+            "}";
+
+        String hashString = encryptionService.encryptText(testString);
+        System.out.println(hashString);
+
+        testString = encryptionService.decryptText(hashString);
+        System.out.println(testString);
     }
 }

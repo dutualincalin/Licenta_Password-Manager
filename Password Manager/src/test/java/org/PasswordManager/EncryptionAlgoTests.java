@@ -1,6 +1,6 @@
 package org.PasswordManager;
 
-import org.PasswordManager.model.PasswordParams;
+import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.utility.Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +23,7 @@ public class EncryptionAlgoTests {
 
     @Test
     public void checkARGON2Algo() {
-        PasswordParams passParams = new PasswordParams(
-            "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==",
-            "NotIdealForYOU",
+        PasswordMetadata passParams = new PasswordMetadata(
             "www.google.com"
         );
 
@@ -42,6 +40,8 @@ public class EncryptionAlgoTests {
 
         String startHash = passParams.toString();
         System.out.println(startHash);
-        System.out.println(argon2PasswordEncoder.encode(startHash));
+        System.out.println(argon2PasswordEncoder.encode(
+            "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==" +
+                "NotIdealForYOU" + startHash));
     }
 }

@@ -5,18 +5,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PasswordParams {
-    private final String imgHash;
+public class PasswordMetadata {
     private final String website;
-    private final String master;
     private String username;
     private int version;
     private int length;
 
-    public PasswordParams(String imgHash, String master, String website){
-        this.imgHash = imgHash;
+    public PasswordMetadata(String website){
         this.website = website;
-        this.master = master;
         username = null;
         version = 0;
         length = 0;
@@ -24,13 +20,7 @@ public class PasswordParams {
 
     @Override
     public String toString() {
-        String stringParams = "";
-
-        if(imgHash != null){
-            stringParams += imgHash;
-        }
-
-        stringParams +=  website + master;
+        String stringParams = website;
 
         if(username != null){
             stringParams += username;

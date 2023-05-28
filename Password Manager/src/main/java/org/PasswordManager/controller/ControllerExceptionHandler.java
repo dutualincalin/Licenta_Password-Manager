@@ -1,6 +1,7 @@
 package org.PasswordManager.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.PasswordManager.exceptions.ConfigurationIncompleteException;
 import org.PasswordManager.exceptions.HashErrorException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,31 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HashErrorException.class)
-    public final ResponseEntity<Object> handleHashErrorException(Exception exception, WebRequest request) {
+    public final ResponseEntity<Object> handleHashErrorException(
+        Exception exception,
+        WebRequest request
+    ) {
         log.warn(exception.getMessage(), exception);
         return handleExceptionInternal(
             exception,
             exception.getMessage(),
             new HttpHeaders(),
             HttpStatus.INTERNAL_SERVER_ERROR,
+            request
+        );
+    }
+
+    @ExceptionHandler(ConfigurationIncompleteException.class)
+    public final ResponseEntity<Object> handleConfigurationIncompleteException(
+        Exception exception,
+        WebRequest request
+    ) {
+        log.warn(exception.getMessage(), exception);
+        return handleExceptionInternal(
+            exception,
+            exception.getMessage(),
+            new HttpHeaders(),
+            HttpStatus.PRECONDITION_REQUIRED,
             request
         );
     }
