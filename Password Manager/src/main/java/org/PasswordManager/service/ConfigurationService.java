@@ -57,7 +57,7 @@ public class ConfigurationService {
     }
 
     public void saveConfigurationToFile(String stringToWrite){
-        FileWriter writer = null;
+        FileWriter writer;
 
         try {
             writer = new FileWriter(Utils.configFileName);
@@ -68,7 +68,7 @@ public class ConfigurationService {
     }
 
     public String gatherConfigurationFromFile(){
-        String gatheredString = null;
+        String gatheredString;
 
         try {
             Scanner scanner = new Scanner(new File(Utils.configFileName));
