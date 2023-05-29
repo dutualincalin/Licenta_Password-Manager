@@ -1,16 +1,15 @@
 package org.PasswordManager.service;
 
 import org.PasswordManager.exceptions.ConfigurationIncompleteException;
-import org.PasswordManager.utility.Utils;
+import org.PasswordManager.mapper.PasswordMapper;
+import org.PasswordManager.model.PasswordMetadata;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 @Service
 public class ConfigurationService {
@@ -18,23 +17,21 @@ public class ConfigurationService {
 
     private final EncryptionService encryptionService;
 
+    private final IOService ioService;
+
     private final ConfigurationIncompleteException configurationIncompleteException;
 
     public ConfigurationService(EncryptionService encryptionService,
+                                IOService ioService,
                                 ConfigurationIncompleteException configurationIncompleteException) {
         this.encryptionService = encryptionService;
+        this.ioService = ioService;
         this.configurationIncompleteException = configurationIncompleteException;
         hashImg = null;
-
-        if(new File(Utils.configFileName).exists()) {
-            // read configuration file
-        } else {
-            hashImg = null;
-        }
     }
 
     public void setConfigurationImage(String path) {
-        BufferedImage configImg = null;
+        BufferedImage configImg;
 
         try {
             configImg = ImageIO.read(new File(path));
@@ -56,40 +53,39 @@ public class ConfigurationService {
         return hashImg;
     }
 
-    public void saveConfigurationToFile(String stringToWrite){
-        FileWriter writer;
+    public void saveConfigurationToQR(
+        ArrayList<PasswordMetadata> passwordMetadataList,
+        String QRName
+    ) {
+        String configuration = hashImg
+            + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
 
-        try {
-            writer = new FileWriter(Utils.configFileName);
-            writer.write(stringToWrite);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ioService.createQR(
+            encryptionService.encryptText(configuration), QRName);
     }
 
-    public String gatherConfigurationFromFile(){
-        String gatheredString;
+    public ArrayList<PasswordMetadata> readConfigurationFromQR(String QRPath) {
+        String configuration = ioService.readQR(QRPath);
+        hashImg = configuration.substring(0, configuration.indexOf("["));
 
-        try {
-            Scanner scanner = new Scanner(new File(Utils.configFileName));
-            gatheredString = scanner.nextLine();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        return gatheredString;
+        return PasswordMapper.instance.jsonToPasswordMetadataList(
+            configuration.substring(configuration.indexOf("["))
+        );
     }
 
-    public void shareConfiguration() {
+    public void saveConfiguration(ArrayList<PasswordMetadata> passwordMetadataList) {
+        String configuration = hashImg
+            + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
 
+        ioService.saveConfigToFile(encryptionService.encryptText(configuration));
     }
 
-    public void saveConfiguration() {
+    public ArrayList<PasswordMetadata> gatherConfiguration() {
+        String configuration = encryptionService.decryptText(ioService.gatherConfigFromFile());
+        hashImg = configuration.substring(0, configuration.indexOf("["));
 
-    }
-
-    public String gatherConfiguration()
-    {
-        return "";
+        return PasswordMapper.instance.jsonToPasswordMetadataList(
+            configuration.substring(configuration.indexOf("["))
+        );
     }
 }

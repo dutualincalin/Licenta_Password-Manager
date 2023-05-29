@@ -2,6 +2,7 @@ package org.PasswordManager.mapper;
 
 
 import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.utility.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mapstruct.InjectionStrategy;
@@ -13,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -40,7 +42,8 @@ public interface PasswordMapper {
 
     default JSONObject passwordMetadataToJSON(PasswordMetadata passwordMetadata) {
         JSONObject passParamsObject = new JSONObject()
-            .put("website", passwordMetadata.getWebsite());
+            .put("website", passwordMetadata.getWebsite())
+            .put("date", Utils.DATE_FORMAT.format(passwordMetadata.getCreationDate()));
 
         if (passwordMetadata.getUsername() != null) {
             passParamsObject.put("username", passwordMetadata.getUsername());
@@ -80,11 +83,21 @@ public interface PasswordMapper {
             passwordMetadata.setLength(metadataObject.getInt("length"));
         }
 
+        if(metadataObject.has("date")) {
+            try {
+                passwordMetadata.setCreationDate(
+                    Utils.DATE_FORMAT.parse(metadataObject.getString("date")));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return passwordMetadata;
     }
 
-    default ArrayList<PasswordMetadata> jsonToPasswordMetadataList(JSONArray metaListArray) {
+    default ArrayList<PasswordMetadata> jsonToPasswordMetadataList(String metaListString) {
         int i;
+        JSONArray metaListArray = new JSONArray(metaListString);
         ArrayList<PasswordMetadata> metaList = new ArrayList<>();
 
         for(i = 0; i < metaListArray.length(); i++) {
