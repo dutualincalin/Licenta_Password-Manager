@@ -18,4 +18,6 @@ public class Utils {
     public static final String CONFIG_FILE_NAME = "config.txt";
     public static final SimpleDateFormat DATE_FORMAT =
         new SimpleDateFormat("E dd.MM.yyyy HH:mm:ss.ns");
+    public static final SimpleDateFormat QR_DATE_FORMAT =
+        new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss_ns");
 }

@@ -3,6 +3,7 @@ package org.PasswordManager.service;
 import org.PasswordManager.exceptions.ConfigurationIncompleteException;
 import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.utility.Utils;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class ConfigurationService {
@@ -53,18 +55,19 @@ public class ConfigurationService {
         return hashImg;
     }
 
-    public void saveConfigurationToQR(
-        ArrayList<PasswordMetadata> passwordMetadataList,
-        String QRName
+    public String exportConfigToQR(
+        ArrayList<PasswordMetadata> passwordMetadataList
     ) {
+        String QRName  = "QR_"+ Utils.QR_DATE_FORMAT.format(new Date());
         String configuration = hashImg
             + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
 
-        ioService.createQR(
-            encryptionService.encryptText(configuration), QRName);
+        ioService.createQR(encryptionService.encryptText(configuration), QRName);
+
+        return "./QRCodes" + QRName;
     }
 
-    public ArrayList<PasswordMetadata> readConfigurationFromQR(String QRPath) {
+    public ArrayList<PasswordMetadata> readConfigFromQR(String QRPath) {
         String configuration = ioService.readQR(QRPath);
         hashImg = configuration.substring(0, configuration.indexOf("["));
 

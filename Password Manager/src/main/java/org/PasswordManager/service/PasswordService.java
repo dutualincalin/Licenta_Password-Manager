@@ -28,38 +28,24 @@ public class PasswordService {
         }
     }
 
-    public String generatePassword(String master, String website, String username, int version,
-                                   int length) {
-
-        PasswordMetadata passwordMetadata = new PasswordMetadata(website);
-
-        if(username != null){
-            passwordMetadata.setUsername(username);
-        }
-
-        if(version != 0){
-            passwordMetadata.setVersion(0);
-        }
-
-        if(length != 0){
-            passwordMetadata.setLength(0);
-        }
-
-        passwordMetadataList.add(passwordMetadata);
-
+    public String generatePassword(String master, PasswordMetadata passwordMetadata) {
         return encryptionService.encryptPassword(
             configurationService.getConfigurationImage(),
             passwordMetadata,
             master
-        ).substring(0, length);
+        ).substring(0, passwordMetadata.getLength());
     }
 
-    public void setPasswordsMetadata(ArrayList<PasswordMetadata> passwordsMetadata) {
+    public void setPasswordMetadataList(ArrayList<PasswordMetadata> passwordsMetadata) {
         this.passwordMetadataList = passwordsMetadata;
     }
 
-    public ArrayList<PasswordMetadata> getPasswordsMetadata() {
+    public ArrayList<PasswordMetadata> getPasswordMetadataList() {
         return passwordMetadataList;
+    }
+
+    public void addPasswordMetadata(PasswordMetadata passwordMetadata) {
+        passwordMetadataList.add(passwordMetadata);
     }
 
     public void removePasswordMetadata(PasswordMetadata passwordMetadata) {

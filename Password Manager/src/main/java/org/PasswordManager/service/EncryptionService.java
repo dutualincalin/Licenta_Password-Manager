@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 
 @Service
 public class EncryptionService {
-    private final String token = "reganaMdrowssaP";
 
     private final PasswordMapper mapper;
 
@@ -30,6 +29,7 @@ public class EncryptionService {
     public EncryptionService(HashErrorException hashErrorException){
         this.hashErrorException = hashErrorException;
         this.mapper = PasswordMapper.instance;
+        String token = "reganaMdrowssaP";
 
         this.pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(
                 token + "pbkdf2",
