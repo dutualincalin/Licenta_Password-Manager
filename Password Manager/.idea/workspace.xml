@@ -4,30 +4,88 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="419957ad-905a-44e9-bcb9-9cd37a6924b1" name="Changes" comment="Finished implementation of pbkdf2 hashing">
+    <list default="true" id="a19102ae-d77d-454a-a86e-eba0fcb14d89" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Backend/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/NFS.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/PasswordManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/configuration/WebSecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/controller/ConfigurationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/controller/ControllerExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/controller/PasswordController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/ConfigurationIncompleteException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/DuplicatePasswordMetadataException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/InternalServerErrorException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/MissingPasswordMetadataException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/PasswordGenerationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/WrongPasswordMetadataExceptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/exceptions/WrongPathException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/mapper/PasswordMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/model/PasswordMetadata.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/service/ConfigurationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/service/EncryptionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/service/IOService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/service/PasswordService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/org/PasswordManager/utility/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/org/PasswordManager/ConfigurationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/org/PasswordManager/EncryptionAlgoTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/org/PasswordManager/EncryptionTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/json_20220924.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Plan licenta.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../Plan licenta.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SOTA schita.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../SOTA schita.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NFS.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jars/json-20220924.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/PasswordManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/configuration/WebSecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/controller/ConfigurationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/controller/ControllerExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/controller/PasswordController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/ConfigurationIncompleteException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/DuplicatePasswordMetadataException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/InternalServerErrorException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/MissingPasswordMetadataException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/PasswordGenerationException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/WrongPasswordMetadataExceptions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/exceptions/WrongPathException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/mapper/PasswordMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/model/PasswordMetadata.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/ConfigurationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/EncryptionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/IOService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/service/PasswordService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/PasswordManager/utility/Utils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/PasswordManager/ConfigurationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/PasswordManager/EncryptionAlgoTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/PasswordManager/EncryptionTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="2QI11L1VvhC2y4zotDJo6FJRUKz" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2Qi5yP9lPaBQR3wO3lIj8yarWGH" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -38,15 +96,30 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Calin/Desktop/Facultate/Licenta/Password Manager/Frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Java",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.30574712",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+        <option value="js.build_tools.npm" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="npm.Angular CLI Server (Frontend)">
+    <configuration name="Angular Application (Frontend)" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
     <configuration name="PasswordManager" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="PasswordManager" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.PasswordManager.PasswordManager" />
@@ -54,47 +127,30 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Angular CLI Server (Frontend)" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/Frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="419957ad-905a-44e9-bcb9-9cd37a6924b1" name="Changes" comment="" />
-      <created>1685026064695</created>
+      <changelist id="a19102ae-d77d-454a-a86e-eba0fcb14d89" name="Changes" comment="" />
+      <created>1685823815853</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1685026064695</updated>
-      <workItem from="1685026066629" duration="7716000" />
+      <updated>1685823815853</updated>
+      <workItem from="1685823816741" duration="841000" />
     </task>
-    <task id="LOCAL-00001" summary="Finished implementation of pbkdf2 hashing">
-      <created>1685050116516</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1685050116516</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finished implementation of pbkdf2 hashing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished implementation of pbkdf2 hashing" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>
