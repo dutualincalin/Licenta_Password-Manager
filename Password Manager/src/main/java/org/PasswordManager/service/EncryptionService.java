@@ -1,13 +1,11 @@
 package org.PasswordManager.service;
 
-import org.PasswordManager.exceptions.HashErrorException;
 import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.utility.Utils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +16,13 @@ public class EncryptionService {
 
     private final PasswordMapper mapper;
 
-    private final TextEncryptor textEncryptor;
-
     private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
+
+    private final TextEncryptor textEncryptor;
 
     private final Argon2PasswordEncoder argon2PasswordEncoder;
 
-    private final HashErrorException hashErrorException;
-
-    public EncryptionService(HashErrorException hashErrorException){
-        this.hashErrorException = hashErrorException;
+    public EncryptionService(){
         this.mapper = PasswordMapper.instance;
         String token = "reganaMdrowssaP";
 
@@ -40,16 +35,16 @@ public class EncryptionService {
         pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
 
         this.argon2PasswordEncoder = new Argon2PasswordEncoder(
-                Utils.SALT_SIZE,
+                0,
                 Utils.ARGON2_HASH_SIZE,
-                Utils.THREAD_NUM,
-                Utils.MEMORY,
+                Utils.ARGON2_THREAD_NUM,
+                Utils.ARGON2_MEMORY,
                 Utils.ARGON2_HASH_ITERATIONS
         );
 
         textEncryptor = Encryptors.text(
             token + "config",
-            KeyGenerators.string().generateKey()
+            "53616c747953616c7479726567616e614d64726f777373615053616c7453616c74"
         );
     }
 
@@ -59,16 +54,9 @@ public class EncryptionService {
     }
 
     public String encryptPassword(String imgHash, PasswordMetadata passwordMetadata, String master) {
-        String finalHash =  argon2PasswordEncoder.encode(
+        return argon2PasswordEncoder.encode(
             imgHash + passwordMetadata.toString() + master
         );
-
-        int index = finalHash.indexOf("$$");
-
-        if(index == -1)
-            throw hashErrorException;
-
-        return finalHash.substring(index + 2);
     }
 
     public String encryptText(String text) {

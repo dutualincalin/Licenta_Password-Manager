@@ -15,32 +15,51 @@ public class PasswordMetadata {
     private int length;
     private Date creationDate;
 
-    public PasswordMetadata(String website){
+    public PasswordMetadata(String website, String username, int version, int length,
+                            Date creationDate) {
         this.website = website;
-        username = null;
-        version = 0;
-        length = 0;
-        creationDate = new Date();
+        this.username = username;
+        this.version = version;
+        this.length = length;
+        this.creationDate = (creationDate == null) ? new Date() : creationDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PasswordMetadata)) {
+            return false;
+        }
+
+        PasswordMetadata that = (PasswordMetadata) o;
+
+        if (getVersion() != that.getVersion()) {
+            return false;
+        }
+
+        if (!getWebsite().equals(that.getWebsite())) {
+            return false;
+        }
+
+        return getUsername() != null ? getUsername().equals(that.getUsername()) :
+            that.getUsername() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getWebsite().hashCode();
+        result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + getVersion();
+        result = 31 * result + getLength();
+        result = 31 * result + getCreationDate().hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
-        String stringParams = website;
-
-        if(username != null){
-            stringParams += username;
-        }
-
-        if(version != 0){
-            stringParams += version;
-        }
-
-        if(length != 0){
-            stringParams += length;
-        }
-
-        stringParams += Utils.DATE_FORMAT.format(creationDate);
-
-        return stringParams;
+        return website + ((username != null) ? username : "") + version + length
+            + Utils.DATE_FORMAT.format(creationDate);
     }
 }

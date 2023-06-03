@@ -4,6 +4,7 @@ import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.service.ConfigurationService;
 import org.PasswordManager.service.PasswordService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,14 +35,16 @@ public class ConfigurationController {
     }
 
     @GetMapping("/ExportQR")
-    public ResponseEntity<String> exportConfigToQR(@RequestBody ArrayList<PasswordMetadata> passwordMetadataList) {
-        return ResponseEntity.status(201)
-            .body(configurationService.exportConfigToQR(passwordMetadataList));
+    public ResponseEntity<String> exportConfigToQR(
+        @Validated @RequestBody() ArrayList<PasswordMetadata> passwordMetadataList
+    ) {
+        return ResponseEntity.status(201).body(
+            configurationService.exportConfigToQR(passwordMetadataList));
     }
 
     @PutMapping("/ReadQR")
     public ResponseEntity<Void> readConfigFromQR(@RequestParam String path) {
-        passwordService.setPasswordMetadataList(configurationService.readConfigFromQR(path));
+        passwordService.addPasswordsToMetadataList(configurationService.readConfigFromQR(path));
         return ResponseEntity.status(200).build();
     }
 

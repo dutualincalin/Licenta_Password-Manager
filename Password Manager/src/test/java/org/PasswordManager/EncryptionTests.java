@@ -1,6 +1,7 @@
 package org.PasswordManager;
 
 import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.service.ConfigurationService;
 import org.PasswordManager.service.EncryptionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,15 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 @SpringBootTest
 public class EncryptionTests {
     @Autowired
     private EncryptionService encryptionService;
+
+    @Autowired
+    private ConfigurationService configurationService;
 
     @Test
     public void checkImageHashing() {
@@ -33,7 +38,11 @@ public class EncryptionTests {
     @Test
     public void checkPasswordHashing() {
         PasswordMetadata passParams = new PasswordMetadata(
-            "www.google.com"
+            "www.google.com",
+            null,
+            0,
+            16,
+            new Date()
         );
 
         passParams.setUsername("CheckyCheckyCheckCheck");
@@ -58,5 +67,17 @@ public class EncryptionTests {
 
         testString = encryptionService.decryptText(hashString);
         System.out.println(testString);
+    }
+
+    @Test
+    public void checkImageAESHashing(){
+        configurationService.setConfigurationImage("./NFS.jpg");
+        System.out.println(configurationService.getConfigurationImage());
+
+        String hash = encryptionService.encryptText(configurationService.getConfigurationImage());
+        System.out.println(hash);
+
+        String imgDecrypted = encryptionService.decryptText(hash);
+        System.out.println(imgDecrypted);
     }
 }
