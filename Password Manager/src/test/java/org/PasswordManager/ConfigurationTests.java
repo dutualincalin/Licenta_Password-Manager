@@ -22,15 +22,15 @@ public class ConfigurationTests {
     @Autowired
     PasswordService passwordService;
 
-//    @Test
-//    public void simpleTestQRWriting() {
-//        ioService.createQR("Hello, it's me from the past!", "QRTest");
-//    }
-//
-//    @Test
-//    public void simpleTestQRReading() {
-//        System.out.println(ioService.readQR("./QRCodes/QRTest.png"));
-//    }
+    @Test
+    public void simpleTestQRWriting() {
+        ioService.createQR("Hello, it's me from the past!", "QRTest");
+    }
+
+    @Test
+    public void simpleTestQRReading() {
+        System.out.println(ioService.readQR("./QRCodes/QRTest.png"));
+    }
 
     @Test
     public void testConfigurationSaving() {

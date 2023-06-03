@@ -2,7 +2,6 @@ package org.PasswordManager.service;
 
 import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
-import org.PasswordManager.utility.Utils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -23,23 +22,32 @@ public class EncryptionService {
     private final Argon2PasswordEncoder argon2PasswordEncoder;
 
     public EncryptionService(){
+        int PBKDF2_HASH_ITERATIONS = 500;
+        int PBKDF2_HASH_SIZE = 256;
+
+        int ARGON2_HASH_ITERATIONS = 10;
+        int ARGON2_HASH_SIZE = 64;
+        int ARGON2_THREAD_NUM = 4;
+        int ARGON2_MEMORY = 1048576;
+
         this.mapper = PasswordMapper.instance;
         String token = "reganaMdrowssaP";
 
+
         this.pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(
                 token + "pbkdf2",
-                Utils.PBKDF2_HASH_ITERATIONS,
-                Utils.PBKDF2_HASH_SIZE
+            PBKDF2_HASH_ITERATIONS,
+            PBKDF2_HASH_SIZE
         );
 
         pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
 
         this.argon2PasswordEncoder = new Argon2PasswordEncoder(
                 0,
-                Utils.ARGON2_HASH_SIZE,
-                Utils.ARGON2_THREAD_NUM,
-                Utils.ARGON2_MEMORY,
-                Utils.ARGON2_HASH_ITERATIONS
+            ARGON2_HASH_SIZE,
+            ARGON2_THREAD_NUM,
+            ARGON2_MEMORY,
+            ARGON2_HASH_ITERATIONS
         );
 
         textEncryptor = Encryptors.text(
