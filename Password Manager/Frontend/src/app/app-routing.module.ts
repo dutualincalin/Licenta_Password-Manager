@@ -7,11 +7,11 @@ import {QrPageComponent} from "./components/pages/qr-page/qr-page.component";
 import {NotFoundPageComponent} from "./components/pages/not-found-page/not-found-page.component";
 
 const routes: Routes = [
-  {path: '', component:HomePageComponent},
-  {path: 'welcome', component: WelcomePageComponent},
-  {path: '/new-password', component: CreatePasswordPageComponent},
-  {path: '/qr', component: QrPageComponent},
-  {path: '**', component: NotFoundPageComponent}
+  {path: 'home', component:HomePageComponent},
+  {path: '', component: WelcomePageComponent},
+  {path: 'new-password', component: CreatePasswordPageComponent},
+  {path: 'qr', component: QrPageComponent},
+  // {path: '**', component: NotFoundPageComponent}
 ];
 
 @NgModule({

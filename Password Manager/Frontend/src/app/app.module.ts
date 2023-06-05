@@ -11,6 +11,8 @@ import { CreatePasswordPageComponent } from './components/pages/create-password-
 import { QrPageComponent } from './components/pages/qr-page/qr-page.component';
 import { NotFoundPageComponent } from './components/pages/not-found-page/not-found-page.component';
 import { PasswordFormComponent } from './components/ui-elements/password-form/password-form.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { PasswordFormComponent } from './components/ui-elements/password-form/pa
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
