@@ -12,6 +12,15 @@ import { QrPageComponent } from './components/pages/qr-page/qr-page.component';
 import { NotFoundPageComponent } from './components/pages/not-found-page/not-found-page.component';
 import { PasswordFormComponent } from './components/ui-elements/password-form/password-form.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NgOptimizedImage} from "@angular/common";
+import {ButtonModule} from "primeng/button";
+import {CardModule} from "primeng/card";
+import {TooltipModule} from "primeng/tooltip";
+import {PanelModule} from "primeng/panel";
+import {DividerModule} from "primeng/divider";
+import {InputTextModule} from "primeng/inputtext";
+import {FormsModule} from "@angular/forms";
+import {SliderModule} from "primeng/slider";
 
 
 @NgModule({
@@ -29,7 +38,16 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgOptimizedImage,
+    ButtonModule,
+    CardModule,
+    TooltipModule,
+    PanelModule,
+    DividerModule,
+    InputTextModule,
+    FormsModule,
+    SliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

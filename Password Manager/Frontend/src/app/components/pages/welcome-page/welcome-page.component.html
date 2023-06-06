@@ -1,7 +1,7 @@
+<img alt="" ngSrc="/assets/welcome-page.jpg" fill>
 <h1 [@fadeInOut] = "this.welcomeShow ? 'shown' : 'hidden'">Welcome!</h1>
 <h1 [@fadeInOut] = "this.loadingShow ? 'shown' : 'hidden'">
   We are configuring your password manager. Please wait!
-</h1>
 
 <div [@fadeInOut] = "this.loadingShow ? 'shown' : 'hidden'"
      class="progress"
@@ -10,5 +10,6 @@
      aria-valuenow="25"
      aria-valuemin="0"
      aria-valuemax="100">
-  <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0">{{loadingProgress}}%</div>
+  <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:10%">{{loadingProgress}}%</div>
 </div>
+</h1>

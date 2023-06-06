@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./create-password-page.component.scss']
 })
 export class CreatePasswordPageComponent {
+  website?: string;
+  username?: string;
+  version?: number;
+  length?: number = 0;
 
+  constructor() {
+  }
 }

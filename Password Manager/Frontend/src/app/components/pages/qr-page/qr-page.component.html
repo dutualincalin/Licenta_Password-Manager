@@ -1,1 +1,32 @@
-<p>qr-page works!</p>
+<img alt="" ngSrc="/assets/qr-page.jpg" fill>
+
+<div id="qr-card">
+<p-card>
+  <ng-template pTemplate="header">
+    <img ngSrc="https://primefaces.org/cdn/primeng/images/usercard.png"
+         alt="Qr Code"
+         [ngSrc]=this.qrPath
+         width="500"
+         height="500"
+         priority
+    />
+  </ng-template>
+  <ng-template pTemplate="content">
+    <p-button
+      icon="pi pi-download"
+      label="Download"
+      (onClick)="this.downloadQR()"
+      [style]="{ 'margin-right': '6em' }"
+    >
+    </p-button>
+    <p-button
+      label="Home"
+      styleClass="p-button-help"
+      icon="pi pi-home"
+      iconPos="right"
+      (onClick)="this.goHome()"
+      [style]="{ 'margin-left': '6em' }">
+    </p-button>
+  </ng-template>
+</p-card>
+</div>
