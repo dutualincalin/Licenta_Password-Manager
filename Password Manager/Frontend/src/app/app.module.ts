@@ -10,7 +10,6 @@ import { HomePageComponent } from './components/pages/home-page/home-page.compon
 import { CreatePasswordPageComponent } from './components/pages/create-password-page/create-password-page.component';
 import { QrPageComponent } from './components/pages/qr-page/qr-page.component';
 import { NotFoundPageComponent } from './components/pages/not-found-page/not-found-page.component';
-import { PasswordFormComponent } from './components/ui-elements/password-form/password-form.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgOptimizedImage} from "@angular/common";
 import {ButtonModule} from "primeng/button";
@@ -21,6 +20,17 @@ import {DividerModule} from "primeng/divider";
 import {InputTextModule} from "primeng/inputtext";
 import {FormsModule} from "@angular/forms";
 import {SliderModule} from "primeng/slider";
+import {MatSliderModule} from '@angular/material/slider';
+import {KeyFilterModule} from "primeng/keyfilter";
+import {MenubarModule} from "primeng/menubar";
+import {FieldsetModule} from "primeng/fieldset";
+import {ToastModule} from "primeng/toast";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {StyleClassModule} from "primeng/styleclass";
+import {PaginatorModule} from "primeng/paginator";
+import {CheckboxModule} from "primeng/checkbox";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 
 @NgModule({
@@ -33,23 +43,32 @@ import {SliderModule} from "primeng/slider";
     CreatePasswordPageComponent,
     QrPageComponent,
     NotFoundPageComponent,
-    PasswordFormComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    NgOptimizedImage,
-    ButtonModule,
-    CardModule,
-    TooltipModule,
-    PanelModule,
-    DividerModule,
-    InputTextModule,
-    FormsModule,
-    SliderModule
-  ],
-  providers: [],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        NgOptimizedImage,
+        ButtonModule,
+        CardModule,
+        TooltipModule,
+        PanelModule,
+        DividerModule,
+        InputTextModule,
+        FormsModule,
+        SliderModule,
+        MatSliderModule,
+        KeyFilterModule,
+        MenubarModule,
+        FieldsetModule,
+        ToastModule,
+        ConfirmDialogModule,
+        StyleClassModule,
+        PaginatorModule,
+        CheckboxModule,
+        OverlayPanelModule,
+    ],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,2 +1,105 @@
-<p>home-page works!</p>
-<h1>Welcome!</h1>
+<img ngSrc="/assets/home-page.jpg" fill priority alt="">
+
+<div id="homeContainer">
+  <app-navigation-bar
+    (passButtonAction)="this.setNewPassword()"
+    (qrExportAction)="this.exportQR()"
+    (exitAction)="this.exitApp()"
+    (qrSelectionAction)="this.extractSelectedState($event)"
+    (selectAllAction)="this.selectAllAction()"
+  ></app-navigation-bar>
+
+  <p-card>
+    <ng-container *ngIf="this.noPasswordEntries">
+        <div id="noEntryContainer">
+          <h1 style="text-align: center">There are no password entries configured!</h1>
+            <p-divider></p-divider>
+            <br>
+            <h3 style="text-align: center">
+              You can press the "New Password" button or press
+              <a routerLink="/newPassword">here</a>
+              .
+            </h3>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!this.noPasswordEntries">
+      <div id="searchBar" class="p-inputgroup">
+        <button
+          type="button"
+          pButton icon="pi pi-search"
+          (click)="this.filterPasswords()"
+        ></button>
+        <input
+          type="text"
+          pInputText
+          placeholder="Search by username or website"
+          [(ngModel)]="this.searchValue"
+          (keyup.enter)="this.filterPasswords()"
+        />
+      </div>
+
+      <div id="metadataList">
+        <ng-container *ngFor="let metadata of this.filteredPasswords.slice(this.firstIndex, this.lastIndex); last as last">
+          <div>
+            <app-password-metadata
+              [metadata]="metadata"
+              [selectionEvent]="this.QRSelectionState"
+              [checked]="this.selectedPasswords.includes(metadata)"
+              (generateEvent)="this.confirmGeneratePassword($event)"
+              (deleteEvent)="this.confirmDeletePassword($event)"
+              (checkboxEvent)="this.setSelectedMetadata($event)"
+            >
+            </app-password-metadata>
+          </div>
+
+          <ng-container *ngIf="!last">
+            <p-divider></p-divider>
+          </ng-container>
+        </ng-container>
+
+        <p-paginator
+          (onPageChange)="onPageChange($event)"
+          [first]=0
+          [rows]=5
+          [totalRecords]="this.filteredPasswords.length">
+        </p-paginator>
+      </div>
+    </ng-container>
+  </p-card>
+</div>
+
+<!-- Pop-up and confirmDialog HTML-->
+<p-toast position="bottom-right"></p-toast>
+
+<p-confirmDialog #dialog [style]="{width: '50vw'}">
+  <ng-template pTemplate="footer">
+    <ng-container *ngIf="this.generatePassword">
+      <div id="masterPassFooter" style="text-align: left">
+        <label style="font-size: 17px">Master Password</label><br>
+        <input
+          pInputText
+          id="masterInput"
+          [(ngModel)]="this.master"
+          (ngModelChange)="this.checkMaster()"
+        /> <br>
+        <label style="font-size: 12px">Insert your master password here.</label>
+
+        <br>
+        <br>
+
+        <p-divider></p-divider>
+
+        <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="dialog.reject()"></button>
+        <button type="button" pButton icon="pi pi-wrench" label="Generate"
+          (click)="this.checkMaster() && dialog.accept()"
+        ></button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!this.generatePassword">
+      <button type="button" pButton icon="pi pi-times" label="No" (click)="dialog.reject()"></button>
+      <button type="button" pButton icon="pi pi-check" label="Yes" (click)="dialog.accept()"></button>
+    </ng-container>
+  </ng-template>
+</p-confirmDialog>

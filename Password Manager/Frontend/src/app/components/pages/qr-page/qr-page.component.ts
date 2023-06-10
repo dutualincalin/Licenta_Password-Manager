@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Component({
@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./qr-page.component.scss']
 })
 export class QrPageComponent{
-  qrPath: string = "/assets/qr-home-selection.jpg";
+  @Input() qrPath: string = "/assets/qr-home-selection.jpg";
 
   constructor(private router: Router) {
   }

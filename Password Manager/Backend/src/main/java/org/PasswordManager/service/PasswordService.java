@@ -45,12 +45,7 @@ public class PasswordService {
         this.wrongPasswordMetadataExceptions = wrongPasswordMetadataExceptions;
         this.internalServerErrorException = internalServerErrorException;
         this.passwordGenerationException = passwordGenerationException;
-
-        if(new File(Utils.CONFIG_FILE_NAME).exists()) {
-            passwordMetadataList = configurationService.gatherConfiguration();
-        } else {
-            passwordMetadataList = new ArrayList<>();
-        }
+        passwordMetadataList = new ArrayList<>();
     }
 
     public void checkMetadata(PasswordMetadata passwordMetadata) {

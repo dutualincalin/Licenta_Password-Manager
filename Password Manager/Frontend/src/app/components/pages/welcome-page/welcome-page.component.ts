@@ -20,34 +20,18 @@ export class WelcomePageComponent implements AfterViewInit{
   loadingShow = false;
   loadingProgress: number = 10;
 
-  // TODO: maybe solve this
-  async ngAfterViewInit(): Promise<void> {
-    this.welcomeShow = true;
-    await this.myDelay(3000);
-    this.welcomeShow = false;
-    await this.myDelay(1000);
-    this.loadingShow = true;
+  ngAfterViewInit(): void {
+    setTimeout(() => {this.welcomeShow = true}, 0);
+    setTimeout(() => {this.welcomeShow = false}, 3000);
+    setTimeout(() => {this.loadingShow = true}, 4000);
   }
 
   constructor(private router: Router) {
-  }
-
-  myDelay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
   goToHomePage() {
     this.router.navigate(['/home']);
   }
 
-  setLoadingProgress (newProgress: number) {
-    this.loadingProgress = newProgress;
-
-    let progressBar = document.getElementById("progress-bar");
-    if (progressBar) {
-      progressBar.setAttribute("style", this.loadingProgress.toString() + '%');
-    }
-  }
-
-  // insert service to check app config
+  // TODO: insert service to check app config
 }

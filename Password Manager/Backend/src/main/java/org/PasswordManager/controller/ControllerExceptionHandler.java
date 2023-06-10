@@ -5,6 +5,7 @@ import org.PasswordManager.exceptions.ConfigurationIncompleteException;
 import org.PasswordManager.exceptions.DuplicatePasswordMetadataException;
 import org.PasswordManager.exceptions.InternalServerErrorException;
 import org.PasswordManager.exceptions.MissingPasswordMetadataException;
+import org.PasswordManager.exceptions.NoConfigException;
 import org.PasswordManager.exceptions.PasswordGenerationException;
 import org.PasswordManager.exceptions.WrongPasswordMetadataExceptions;
 import org.PasswordManager.exceptions.WrongPathException;
@@ -19,12 +20,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(NoConfigException.class)
+    public final ResponseEntity<Object> handleNoConfigException(
+        Exception exception,
+        WebRequest request
+    ) {
+        log.warn(exception.getMessage(), exception);
+        return handleExceptionInternal(
+            exception,
+            exception.getMessage(),
+            new HttpHeaders(),
+            HttpStatus.NOT_FOUND,
+            request
+        );
+    }
+
     @ExceptionHandler(InternalServerErrorException.class)
     public final ResponseEntity<Object> handleInternalServerExceptions(
         Exception exception,
         WebRequest request
     ) {
-        log.warn(exception.getMessage(), exception);
+        log.error(exception.getMessage(), exception);
         return handleExceptionInternal(
             exception,
             exception.getMessage(),

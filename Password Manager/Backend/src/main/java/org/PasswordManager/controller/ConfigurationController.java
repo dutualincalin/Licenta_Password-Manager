@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,13 +27,13 @@ public class ConfigurationController {
         this.passwordService = passwordService;
     }
 
-    @PostMapping("/imgConfig")
+    @GetMapping("/imgConfig")
     public ResponseEntity<Void> setImageConfiguration(@RequestParam String imgPath) {
         configurationService.setConfigurationImage(imgPath);
         return ResponseEntity.status(200).build();
     }
 
-    @GetMapping("/ExportQR")
+    @PostMapping("/exportQR")
     public ResponseEntity<String> exportConfigToQR(
         @Validated @RequestBody() ArrayList<PasswordMetadata> passwordMetadataList
     ) {
@@ -42,15 +41,21 @@ public class ConfigurationController {
             configurationService.exportConfigToQR(passwordMetadataList));
     }
 
-    @PutMapping("/ReadQR")
+    @GetMapping("/readQR")
     public ResponseEntity<Void> readConfigFromQR(@RequestParam String path) {
         passwordService.addPasswordsToMetadataList(configurationService.readConfigFromQR(path));
         return ResponseEntity.status(200).build();
     }
 
-    @PutMapping("/ConfigSave")
-    public  ResponseEntity<Void> saveAppConfig() {
+    @GetMapping("/configSave")
+    public ResponseEntity<Void> saveAppConfig() {
         configurationService.saveConfiguration(passwordService.getPasswordMetadataList());
+        return ResponseEntity.status(200).build();
+    }
+
+    @GetMapping("/configGather")
+    public ResponseEntity<Void> gatherAppConfig() {
+        passwordService.setPasswordMetadataList(configurationService.gatherConfiguration());
         return ResponseEntity.status(200).build();
     }
 }

@@ -1,0 +1,55 @@
+#homeContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#noEntryContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 77.5vh;
+}
+
+p-card.p-element {
+  position: absolute;
+  margin-top: 7.5vh;
+  width: 50vw;
+  opacity: 96%;
+  padding: 0.25vh;
+
+  ::ng-deep .p-card-body {
+    height: 89vh;
+  }
+}
+
+#searchBar {
+  height: 5vh;
+  margin-bottom: 2.75vh;
+}
+
+#metadataList {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 77.5vh;
+}
+
+::ng-deep div.p-card{
+
+  & div.p-card-body {
+    padding: 1vh 1.25vw;
+  }
+
+  & div.p-card-content {
+    padding-bottom: 0;
+    padding-top: 0.75vh;
+  }
+}
+
+::ng-deep div.p-paginator.p-component {
+  padding-top: 1vh;
+  padding-bottom: 0;
+  height: 3.75vh;
+  align-content: center;
+}

@@ -1,7 +1,6 @@
 <img alt="" ngSrc="/assets/qr-page.jpg" fill>
 
-<div id="qr-card">
-<p-card>
+<p-card id="qr-card">
   <ng-template pTemplate="header">
     <img ngSrc="https://primefaces.org/cdn/primeng/images/usercard.png"
          alt="Qr Code"
@@ -11,22 +10,26 @@
          priority
     />
   </ng-template>
+
   <ng-template pTemplate="content">
-    <p-button
-      icon="pi pi-download"
-      label="Download"
-      (onClick)="this.downloadQR()"
-      [style]="{ 'margin-right': '6em' }"
-    >
-    </p-button>
-    <p-button
-      label="Home"
-      styleClass="p-button-help"
-      icon="pi pi-home"
-      iconPos="right"
-      (onClick)="this.goHome()"
-      [style]="{ 'margin-left': '6em' }">
-    </p-button>
+    <div style="display: flex;justify-content: space-between;">
+      <span>
+        <p-button
+          icon="pi pi-download"
+          label="Download"
+          (onClick)="this.downloadQR()">
+        </p-button>
+      </span>
+
+      <span>
+        <p-button
+          label="Home"
+          styleClass="p-button-help"
+          icon="pi pi-home"
+          iconPos="right"
+          (onClick)="this.goHome()">
+        </p-button>
+      </span>
+    </div>
   </ng-template>
 </p-card>
-</div>

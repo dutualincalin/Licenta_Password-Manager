@@ -1,1 +1,104 @@
-<p>navigation-bar works!</p>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light">
+  <a class="navbar-brand" routerLink="/home">
+    <img ngSrc="/assets/password_icon.png" width="40" height="40" priority alt="">
+  </a>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav mr-auto">
+      <p-button
+        id="newPasswordButton"
+        class="nav-item"
+        label="New Password"
+        styleClass="p-button-text"
+        icon="pi pi-plus"
+        iconPos="left"
+        [hidden]="this.qrSelection"
+        (onClick)="this.passButtonAction.emit()"
+      >
+
+      </p-button>
+      <p-button
+        id="QRExportButton"
+        class="nav-item"
+        label="QR Export"
+        styleClass="p-button-text"
+        icon="pi pi-qrcode"
+        iconPos="left"
+        [hidden]="this.qrSelection"
+        (onClick)="this.switchQRSelectionState()"
+      >
+      </p-button>
+
+      <p-button
+        id="backButton"
+        class="nav-item"
+        label="Back"
+        styleClass="p-button-text"
+        icon="pi pi-arrow-circle-left"
+        iconPos="left"
+        [hidden]="!this.qrSelection"
+        (onClick)="this.switchQRSelectionState()"
+      >
+      </p-button>
+
+      <p-button
+        id="selectAllButton"
+        class="nav-item"
+        label="Select All"
+        styleClass="p-button-text"
+        icon="pi pi-check-square"
+        iconPos="left"
+        [hidden]="!this.qrSelection"
+        (onClick)="this.selectAll()"
+      >
+      </p-button>
+    </div>
+
+    <div class="navbar-nav mr-auto">
+      <p-button
+        id="helpButton"
+        class="nav-item"
+        label="Help"
+        styleClass="p-button-help p-button-text"
+        icon="pi pi-info-circle"
+        iconPos="left"
+        (onClick)="op.toggle($event)"
+      >
+      </p-button>
+
+      <p-button
+        id="quitButton"
+        class="nav-item"
+        label="Quit"
+        styleClass="p-button-danger p-button-text"
+        icon="pi pi-power-off"
+        iconPos="left"
+        [hidden]="this.qrSelection"
+        (onClick)="this.exitAction.emit()"
+      >
+      </p-button>
+
+      <p-button
+        id="exportButton"
+        class="nav-item"
+        label="Export"
+        styleClass="p-button-help p-button-text"
+        icon="pi pi-external-link"
+        iconPos="left"
+        [hidden]="!this.qrSelection"
+        (onClick)="this.exportQR()"
+      >
+      </p-button>
+    </div>
+  </div>
+</nav>
+
+<p-overlayPanel [showCloseIcon]="true" [autoZIndex]="true" [baseZIndex]="100" #op>
+  <img [hidden]="this.qrSelection" ngSrc="/assets/about.png" alt="product" width="850" height="335"/>
+  <p [hidden]="!this.qrSelection">
+    Here you will have to choose what password entries you want to export <br>
+    using the checkboxes.One password entry has its checkbox to the right.
+    <br>
+    <br>
+    If you have no passwords you can still export your configuration.
+  </p>
+</p-overlayPanel>

@@ -24,7 +24,7 @@ public class PasswordController {
     }
 
     @PostMapping(value = "/addPassMeta")
-    public ResponseEntity<Void> addPasswordMetadata(
+    public ResponseEntity<Void> createPasswordMetadata(
         @Validated @RequestBody PasswordMetadata passwordMetadata
     ) {
         passwordService.addPasswordMetadata(passwordMetadata);
