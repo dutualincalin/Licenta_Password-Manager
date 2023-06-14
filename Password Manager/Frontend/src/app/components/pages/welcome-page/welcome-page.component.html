@@ -1,21 +1,73 @@
-<img alt="" ngSrc="/assets/welcome-page.jpg" fill>
+<div style="position: relative; width: 100vw; height: 100vh">
+  <img alt="" ngSrc="/assets/welcome-page.jpg" fill>
 
-<h1 [@fadeInOut] = "this.welcomeShow ? 'shown' : 'hidden'">Welcome!</h1>
-<h1 [@fadeInOut] = "this.loadingShow ? 'shown' : 'hidden'">
-  We are configuring your password manager. Please wait!
+  <div style="
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+    height: 100vh"
+  >
+    <div style="position: relative; width: 64.5vw; height: 6vh">
+      <h1 [@fadeInOut] = "this.welcomeShow ? 'shown' : 'hidden'">Welcome!</h1>
 
-  <div [@fadeInOut] = "this.loadingShow ? 'shown' : 'hidden'"
-       class="progress"
-       role="progressbar"
-       aria-label="Example with label"
-       aria-valuenow="25"
-       aria-valuemin="0"
-       aria-valuemax="100">
-    <div
-      id="progress-bar"
-      class="progress-bar progress-bar-striped progress-bar-animated"
-      [style]="{width: this.loadingProgress + '%'}">
-      {{loadingProgress}}%
+      <h1 [@fadeInOut] = "this.loadingShow ? 'shown' : 'hidden'">
+        We are configuring your password manager. Please wait!
+      </h1>
+
+      <h1 id="imgUploadInstructions" [@fadeInOut] = "!this.imgLoaded ? 'shown' : 'hidden'">
+        To start the app please upload an image of your liking. <br>
+        This step is necessary and it must be done only once.
+      </h1>
+    </div>
+
+    <div [@fadeInOut] = "this.showProgressBar ? 'shown' : 'hidden'"
+         class="progress"
+         role="progressbar"
+         aria-label="Example with label"
+         aria-valuenow="25"
+         aria-valuemin="0"
+         aria-valuemax="100">
+      <div
+        id="progress-bar"
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        [style]="{width: this.loadingProgress + '%'}">
+      </div>
+    </div>
+
+    <div [@fadeInOut] = "!this.imgLoaded ? 'shown' : 'hidden'" id="fileUpload"
+    >
+      <p-button
+        label="Select File"
+        icon="pi pi-file-import"
+        (click)="fileInput.click()"
+      >
+      </p-button>
+      <input style="display: none" type="file" accept="image/*" (change)="onImgSelect($event)" #fileInput>
+
+      <p-button
+        [disabled]="!this.imgFileURL"
+        [@fadeInOut] = "this.imgFileURL ? 'shown' : 'hidden'"
+        (click)="preview.toggle($event)"
+        icon="pi pi-image"
+        styleClass="p-button-secondary"
+        label="Preview">
+      </p-button>
+
+      <p-button
+        label="Upload"
+        icon="pi pi-upload"
+        styleClass="p-button-danger"
+        (click)="onImgUpload()"
+        [loading]="this.uploadLoading"
+        loadingIcon="pi pi-spin pi-spinner"
+      >
+      </p-button>
     </div>
   </div>
-</h1>
+</div>
+
+<p-overlayPanel #preview>
+  <img [src]="this.imgFileURL" alt="product" width="300" height="200"/>
+</p-overlayPanel>

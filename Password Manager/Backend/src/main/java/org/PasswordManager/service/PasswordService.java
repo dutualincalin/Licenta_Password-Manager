@@ -1,16 +1,17 @@
 package org.PasswordManager.service;
 
 import org.PasswordManager.exceptions.DuplicatePasswordMetadataException;
+import org.PasswordManager.exceptions.EmptyListException;
 import org.PasswordManager.exceptions.InternalServerErrorException;
 import org.PasswordManager.exceptions.MissingPasswordMetadataException;
 import org.PasswordManager.exceptions.PasswordGenerationException;
 import org.PasswordManager.exceptions.WrongPasswordMetadataExceptions;
 import org.PasswordManager.model.PasswordMetadata;
-import org.PasswordManager.utility.Utils;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PasswordService {
@@ -23,28 +24,32 @@ public class PasswordService {
 
     private final DuplicatePasswordMetadataException duplicatePasswordMetadataException;
 
-    private final MissingPasswordMetadataException missingPasswordMetadataException;
-
     private final WrongPasswordMetadataExceptions wrongPasswordMetadataExceptions;
 
     private final InternalServerErrorException internalServerErrorException;
 
     private final PasswordGenerationException passwordGenerationException;
 
+    private final EmptyListException emptyListException;
+
+    private final MissingPasswordMetadataException missingPasswordMetadataException;
+
     public PasswordService(EncryptionService encryptionService,
                            ConfigurationService configurationService,
                            DuplicatePasswordMetadataException duplicatePasswordMetadataException,
-                           MissingPasswordMetadataException missingPasswordMetadataException,
                            WrongPasswordMetadataExceptions wrongPasswordMetadataExceptions,
                            InternalServerErrorException internalServerErrorException,
-                           PasswordGenerationException passwordGenerationException) {
+                           PasswordGenerationException passwordGenerationException,
+                           EmptyListException emptyListException,
+                           MissingPasswordMetadataException missingPasswordMetadataException) {
         this.encryptionService = encryptionService;
         this.configurationService = configurationService;
         this.duplicatePasswordMetadataException = duplicatePasswordMetadataException;
-        this.missingPasswordMetadataException = missingPasswordMetadataException;
         this.wrongPasswordMetadataExceptions = wrongPasswordMetadataExceptions;
         this.internalServerErrorException = internalServerErrorException;
         this.passwordGenerationException = passwordGenerationException;
+        this.emptyListException = emptyListException;
+        this.missingPasswordMetadataException = missingPasswordMetadataException;
         passwordMetadataList = new ArrayList<>();
     }
 
@@ -57,20 +62,10 @@ public class PasswordService {
         }
     }
 
-    public String generatePassword(String master, PasswordMetadata passwordMetadata) {
-        checkMetadata(passwordMetadata);
-
-        if(passwordMetadataList.stream().noneMatch
-            (passwordMetadataItem -> passwordMetadataItem.equals(passwordMetadata)
-                && passwordMetadataItem.getCreationDate().equals(passwordMetadata.getCreationDate())
-            )
-        ){
-            throw wrongPasswordMetadataExceptions;
-        }
-
-        if(!passwordMetadataList.contains(passwordMetadata)){
-            throw passwordGenerationException;
-        }
+    public String generatePassword(String master, String id) {
+        PasswordMetadata passwordMetadata = this.passwordMetadataList.stream()
+            .filter(passwordMeta -> passwordMeta.getId().equals(id))
+            .findFirst().orElseThrow(MissingPasswordMetadataException::new);
 
         String hash = encryptionService.encryptPassword(
             configurationService.getConfigurationImage(),
@@ -108,24 +103,32 @@ public class PasswordService {
         checkMetadata(passwordMetadata);
 
         if(passwordMetadataList.contains(passwordMetadata)) {
-            if(passwordMetadata.getUsername() == null){
+            if(Objects.equals(passwordMetadata.getUsername(), "")){
                 do {
                     passwordMetadata.setVersion(passwordMetadata.getVersion() + 1);
                 } while(passwordMetadataList.contains(passwordMetadata));
+            } else {
+                throw duplicatePasswordMetadataException;
             }
-
-            else throw duplicatePasswordMetadataException;
         }
+
         passwordMetadataList.add(passwordMetadata);
     }
 
-    public void removePasswordMetadata(PasswordMetadata passwordMetadata) {
-        checkMetadata(passwordMetadata);
+    public void removePasswordMetadata(String id) {
+        if(passwordMetadataList.isEmpty()) {
+            throw emptyListException;
+        }
 
-        if(!passwordMetadataList.contains(passwordMetadata)) {
+        if(passwordMetadataList.stream().noneMatch(
+            passwordMetadata -> passwordMetadata.getId().equals(id)
+        )) {
             throw missingPasswordMetadataException;
         }
 
-        passwordMetadataList.remove(passwordMetadata);
+        passwordMetadataList = (ArrayList<PasswordMetadata>) passwordMetadataList
+            .stream().filter(passwordMetadata -> !passwordMetadata.getId().equals(id))
+            .collect(
+                Collectors.toList());
     }
 }

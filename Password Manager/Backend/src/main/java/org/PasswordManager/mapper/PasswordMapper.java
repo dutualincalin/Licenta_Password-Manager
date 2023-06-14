@@ -44,6 +44,7 @@ public interface PasswordMapper {
 
     default JSONObject passwordMetadataToJSON(PasswordMetadata passwordMetadata) {
         JSONObject passParamsObject = new JSONObject()
+            .put("id", passwordMetadata.getId())
             .put("website", passwordMetadata.getWebsite())
             .put("version", passwordMetadata.getVersion())
             .put("length", passwordMetadata.getLength())
@@ -75,6 +76,8 @@ public interface PasswordMapper {
                 metadataObject.getInt("length"),
                 Utils.DATE_FORMAT.parse(metadataObject.getString("date"))
             );
+
+            passwordMetadata.setId(metadataObject.getString("id"));
         } catch (ParseException e) {
             e.printStackTrace();
             throw new InternalServerErrorException();

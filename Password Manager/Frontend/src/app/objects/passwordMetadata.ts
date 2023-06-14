@@ -1,6 +1,7 @@
 
 export class PasswordMetadata {
   constructor(
+    private _id: string,
     private _website: string,
     private _username: string,
     private _version: number,
@@ -8,6 +9,9 @@ export class PasswordMetadata {
   ) {
   }
 
+  get id(): string {
+    return this._id;
+  }
 
   get website(): string {
     return this._website;

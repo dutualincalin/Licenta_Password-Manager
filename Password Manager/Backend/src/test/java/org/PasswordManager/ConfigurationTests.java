@@ -35,7 +35,7 @@ public class ConfigurationTests {
     @Test
     public void testConfigurationSaving() {
         configurationService.setConfigurationImage("./NFS.jpg");
-        passwordService.addPasswordMetadata(new PasswordMetadata("www.facebook.com", "facebookUser", 0,16, new Date()));
+        passwordService.addPasswordMetadata(new PasswordMetadata( "www.facebook.com", "facebookUser", 0,16, new Date()));
         passwordService.addPasswordMetadata(new PasswordMetadata("www.pinterest.com", "pinterestGuy", 0,64, new Date()));
         passwordService.addPasswordMetadata(new PasswordMetadata("www.twitter.com", "Elon Musk", 0,64, new Date()));
 

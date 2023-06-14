@@ -5,10 +5,12 @@ import lombok.Setter;
 import org.PasswordManager.utility.Utils;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class PasswordMetadata {
+    private String id;
     private final String website;
     private String username;
     private int version;
@@ -16,7 +18,8 @@ public class PasswordMetadata {
     private Date creationDate;
 
     public PasswordMetadata(String website, String username, int version, int length,
-                            Date creationDate) {
+                             Date creationDate) {
+        this.id = UUID.randomUUID().toString();
         this.website = website;
         this.username = username;
         this.version = version;
@@ -59,7 +62,7 @@ public class PasswordMetadata {
 
     @Override
     public String toString() {
-        return website + ((username != null) ? username : "") + version + length
+        return id + website + ((username != null) ? username : "") + version + length
             + Utils.DATE_FORMAT.format(creationDate);
     }
 }

@@ -1,16 +1,11 @@
 package org.PasswordManager.service;
 
 import org.PasswordManager.exceptions.ConfigurationIncompleteException;
-import org.PasswordManager.exceptions.WrongPathException;
 import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.utility.Utils;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,32 +19,18 @@ public class ConfigurationService {
 
     private final ConfigurationIncompleteException configurationIncompleteException;
 
-    private final WrongPathException wrongPathException;
-
     public ConfigurationService(EncryptionService encryptionService,
                                 IOService ioService,
-                                ConfigurationIncompleteException configurationIncompleteException,
-                                WrongPathException wrongPathException) {
+                                ConfigurationIncompleteException configurationIncompleteException) {
         this.encryptionService = encryptionService;
         this.ioService = ioService;
         this.configurationIncompleteException = configurationIncompleteException;
-        this.wrongPathException = wrongPathException;
         hashImg = null;
     }
 
-    public void setConfigurationImage(String path) {
-        BufferedImage configImg;
-
-        try {
-            configImg = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            throw wrongPathException;
-        }
-
-        hashImg = encryptionService.encryptImage(
-            configImg,
-            path.substring(path.length() - 3)
-        );
+    public void setConfigurationImage(String imgData) {
+        String pattern = "data:image/\\w+;base64,";
+        hashImg = encryptionService.encryptImage(imgData.replaceFirst(pattern, ""));
     }
 
     public String getConfigurationImage() {
@@ -60,17 +41,17 @@ public class ConfigurationService {
         return hashImg;
     }
 
-    public String exportConfigToQR(
+    public byte[] exportConfigToQR(
         ArrayList<PasswordMetadata> passwordMetadataList
     ) {
         String configuration = getConfigurationImage()
             + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
-        String QRName  = "QR_"+ Utils.QR_DATE_FORMAT.format(new Date()) + ".png";
+        String QRName  = "QR_" + Utils.QR_DATE_FORMAT.format(new Date()) + ".png";
 
 
         ioService.createQR(encryptionService.encryptText(configuration), QRName);
 
-        return "./QRCodes/" + QRName;
+        return ioService.getImageData("./QRCodes/" + QRName);
     }
 
     public ArrayList<PasswordMetadata> readConfigFromQR(String QRPath) {

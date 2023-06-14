@@ -31,7 +31,11 @@ import {StyleClassModule} from "primeng/styleclass";
 import {PaginatorModule} from "primeng/paginator";
 import {CheckboxModule} from "primeng/checkbox";
 import {OverlayPanelModule} from "primeng/overlaypanel";
-
+import {HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule} from "@angular/common/http";
+import { CookieService } from 'ngx-cookie-service';
+import {InterceptorService} from "./services/interceptor.service";
+import {DialogModule} from "primeng/dialog";
+import {RippleModule} from "primeng/ripple";
 
 @NgModule({
   declarations: [
@@ -44,31 +48,43 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
     QrPageComponent,
     NotFoundPageComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        NgOptimizedImage,
-        ButtonModule,
-        CardModule,
-        TooltipModule,
-        PanelModule,
-        DividerModule,
-        InputTextModule,
-        FormsModule,
-        SliderModule,
-        MatSliderModule,
-        KeyFilterModule,
-        MenubarModule,
-        FieldsetModule,
-        ToastModule,
-        ConfirmDialogModule,
-        StyleClassModule,
-        PaginatorModule,
-        CheckboxModule,
-        OverlayPanelModule,
-    ],
-  providers: [ConfirmationService, MessageService],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    NgOptimizedImage,
+    ButtonModule,
+    CardModule,
+    TooltipModule,
+    PanelModule,
+    DividerModule,
+    InputTextModule,
+    FormsModule,
+    SliderModule,
+    MatSliderModule,
+    KeyFilterModule,
+    MenubarModule,
+    FieldsetModule,
+    ToastModule,
+    ConfirmDialogModule,
+    StyleClassModule,
+    PaginatorModule,
+    CheckboxModule,
+    OverlayPanelModule,
+    HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-XSRF-TOKEN'
+    }),
+    DialogModule,
+    RippleModule
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService,
+    CookieService,
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

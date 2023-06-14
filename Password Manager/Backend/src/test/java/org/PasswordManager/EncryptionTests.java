@@ -1,5 +1,6 @@
 package org.PasswordManager;
 
+import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.service.ConfigurationService;
 import org.PasswordManager.service.EncryptionService;
@@ -23,6 +24,7 @@ public class EncryptionTests {
 
     @Test
     public void checkImageHashing() {
+        PasswordMapper passwordMapper = PasswordMapper.instance;
         BufferedImage img = null;
         String imageName = "Florea_The_God.jpg";
 
@@ -31,7 +33,9 @@ public class EncryptionTests {
         } catch (IOException ignored) {
         }
 
-        String hashedImage = encryptionService.encryptImage(img, imageName.substring(imageName.length() - 3));
+        String hashedImage = encryptionService.encryptImage(
+            passwordMapper.imageToBase64String(img, "jpg")
+        );
         System.out.println(hashedImage);
     }
 

@@ -1,18 +1,29 @@
 h1 {
   text-align: center;
+  vertical-align: center;
   position: absolute;
-  left:17.5vw;
-  right:17.5vw;
-  top: 40vh;
-  bottom: 40vh;
-  margin-bottom: 5vw;
+  width: 64.75vw;
+  height: 6vh;
   color: white;
 }
 
 .progress {
-  margin-top: 2%;
-  margin-left: 25%;
-  width: 50%;
-  height: 40%;
-  position: absolute;
+  margin-top: 6vh;
+  width: 45vw;
+  height: 4vh;
+  position: relative;
+}
+
+#fileUpload {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5vh;
+  height: 150px;
+  width: 40vw;
+  align-items: flex-start;
+}
+
+#previewImg {
+  border: 2mm ridge rgba(38, 247, 255, .6);
 }

@@ -10,40 +10,45 @@ export class PasswordService {
   constructor(protected http: HttpClient) {
   }
 
-  create(passwordMetadata: PasswordMetadata): Observable<HttpResponse<void>> {
+  create(passwordForm: {}): Observable<HttpResponse<void>> {
     return this.http.post<void>(
       `${this.resourceUrl}/addPassMeta`,
-      passwordMetadata,
-      {observe: 'response'}
+      passwordForm,
+      {observe: 'response', withCredentials: true}
     );
   }
 
-  delete(passwordMetadata: PasswordMetadata): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      body: {passwordMetadata: JSON.stringify(passwordMetadata)},
+      params: new HttpParams().set("id", id),
+      withCredentials: true
     };
 
     return this.http.delete<HttpResponse<{}>>(`${this.resourceUrl}/delPassMeta`, options);
   }
 
   fetch():Observable<HttpResponse<PasswordMetadata[]>> {
-    return this.http.get<PasswordMetadata[]>(`${this.resourceUrl}/getPassMetaList`, {observe: 'response'});
+    return this.http.get<PasswordMetadata[]>(
+      `${this.resourceUrl}/getPassMetaList`,
+      {observe: 'response', withCredentials: true}
+    );
   }
 
-  // TODO: Solve this issue
-  generate(passwordMetadata: PasswordMetadata, masterPass: string): Observable<HttpResponse<string>> {
+  generate(masterPass: string, id: string): Observable<HttpResponse<{[string: string]: any}>> {
     masterPass = masterPass.trim();
 
-    return this.http.get<string>(`${this.resourceUrl}/generatePassword`, {
+    return this.http.get(`${this.resourceUrl}/generatePassword`, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      // body: JSON.parse(JSON.stringify(passwordMetadata)),
-      params: new HttpParams().append('masterPass', masterPass),
-      observe: 'response'
+      params: new HttpParams()
+        .set('masterPass',masterPass)
+        .set('id', id),
+      observe: 'response',
+      withCredentials: true
     });
   }
 }

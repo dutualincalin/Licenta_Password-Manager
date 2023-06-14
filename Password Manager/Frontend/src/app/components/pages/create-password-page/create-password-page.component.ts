@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
+import {PasswordService} from "../../../services/password.service";
 
 @Component({
   selector: 'app-create-password-page',
@@ -13,7 +14,10 @@ export class CreatePasswordPageComponent{
   version: number = 0;
   length: number = 16;
 
-  constructor(private router: Router, private messageService: MessageService) {
+  constructor(
+    private router: Router,
+    private messageService: MessageService,
+    private passwordService: PasswordService) {
   }
 
   checkVersion(): boolean {
@@ -43,7 +47,7 @@ export class CreatePasswordPageComponent{
   checkWebsite(): boolean {
     let websiteInput = document.getElementById("websiteInput");
     let websiteRegex=
-      new RegExp(/^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]+.[a-z]{3}(\/[a-z]+)*$/);
+      new RegExp(/^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]+.[a-z]{2,3}(\/[a-z]+)*$/);
 
     if(websiteRegex.test(this.website)) {
       websiteInput!.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched";
@@ -92,6 +96,31 @@ export class CreatePasswordPageComponent{
     }
 
     if(!truth) return;
-    // TODO: call creation service and then go home
+
+    this.passwordService.create({
+      website: this.website,
+      username: this.username,
+      length: this.length,
+      version: this.version
+    }).subscribe({
+      complete: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Your password configuration has been created',
+        })
+
+        this.router.navigate(["/home"]);
+      },
+
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'An error has occurred. Please try again!',
+          sticky: true
+        });
+      }
+    });
   }
 }

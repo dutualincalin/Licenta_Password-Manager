@@ -1,35 +1,37 @@
-<img alt="" ngSrc="/assets/qr-page.jpg" fill>
+<div style="position: relative; width: 100vw; height: 100vh">
+  <img alt="" ngSrc="/assets/qr-page.jpg" fill>
 
-<p-card id="qr-card">
-  <ng-template pTemplate="header">
-    <img ngSrc="https://primefaces.org/cdn/primeng/images/usercard.png"
-         alt="Qr Code"
-         [ngSrc]=this.qrPath
-         width="500"
-         height="500"
-         priority
-    />
-  </ng-template>
+  <p-card id="qr-card">
+    <ng-template pTemplate="header">
+      <img
+        alt="Invalid Qr Code Path"
+        [ngSrc]="this.qrPath"
+        width="500"
+        height="500"
+        priority
+      />
+    </ng-template>
 
-  <ng-template pTemplate="content">
-    <div style="display: flex;justify-content: space-between;">
-      <span>
-        <p-button
-          icon="pi pi-download"
-          label="Download"
-          (onClick)="this.downloadQR()">
-        </p-button>
-      </span>
+    <ng-template pTemplate="content">
+      <div style="display: flex;justify-content: space-between;">
+        <span>
+          <p-button
+            icon="pi pi-download"
+            label="Download"
+            (onClick)="this.downloadQR()">
+          </p-button>
+        </span>
 
-      <span>
-        <p-button
-          label="Home"
-          styleClass="p-button-help"
-          icon="pi pi-home"
-          iconPos="right"
-          (onClick)="this.goHome()">
-        </p-button>
-      </span>
-    </div>
-  </ng-template>
-</p-card>
+        <span>
+          <p-button
+            label="Home"
+            styleClass="p-button-help"
+            icon="pi pi-home"
+            iconPos="right"
+            (onClick)="this.goHome()">
+          </p-button>
+        </span>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

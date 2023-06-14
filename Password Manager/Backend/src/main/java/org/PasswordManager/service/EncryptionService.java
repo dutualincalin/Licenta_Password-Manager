@@ -1,6 +1,5 @@
 package org.PasswordManager.service;
 
-import org.PasswordManager.mapper.PasswordMapper;
 import org.PasswordManager.model.PasswordMetadata;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -8,13 +7,8 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.awt.image.BufferedImage;
-
 @Service
 public class EncryptionService {
-
-    private final PasswordMapper mapper;
-
     private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
 
     private final TextEncryptor textEncryptor;
@@ -30,9 +24,7 @@ public class EncryptionService {
         int ARGON2_THREAD_NUM = 4;
         int ARGON2_MEMORY = 1048576;
 
-        this.mapper = PasswordMapper.instance;
         String token = "reganaMdrowssaP";
-
 
         this.pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(
                 token + "pbkdf2",
@@ -56,8 +48,7 @@ public class EncryptionService {
         );
     }
 
-    public String encryptImage(BufferedImage image, String type) {
-        String imageString = mapper.imageToBase64String(image, type);
+    public String encryptImage(String imageString) {
         return pbkdf2PasswordEncoder.encode(imageString);
     }
 

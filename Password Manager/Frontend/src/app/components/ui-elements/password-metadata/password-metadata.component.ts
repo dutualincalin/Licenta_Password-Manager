@@ -17,7 +17,6 @@ export class PasswordMetadataComponent {
     = new EventEmitter<{passMeta: PasswordMetadata, selected: boolean}>();
 
   checkingEvent() {
-    console.log(this.checked);
     this.checkboxEvent.emit({passMeta: this.metadata, selected: this.checked});
   }
 }

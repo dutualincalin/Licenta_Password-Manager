@@ -1,15 +1,24 @@
-import {Component, Input} from '@angular/core';
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-qr-page',
   templateUrl: './qr-page.component.html',
   styleUrls: ['./qr-page.component.scss']
 })
-export class QrPageComponent{
-  @Input() qrPath: string = "/assets/qr-home-selection.jpg";
+export class QrPageComponent implements OnInit{
+  protected qrPath: string = "";
 
-  constructor(private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
+  }
+
+  ngOnInit(): void {
+    let path;
+    this.activatedRoute.paramMap.subscribe(params => {
+        path = params.get('path');
+        console.log(path);
+    });
+    path ? this.qrPath = path : this.qrPath = "";
   }
 
   goHome() {
@@ -24,6 +33,4 @@ export class QrPageComponent{
     downloadElement.click();
     document.body.removeChild(downloadElement);
   }
-
-  // TODO: Initialize qrPath in this page
 }

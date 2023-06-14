@@ -11,6 +11,7 @@
         styleClass="p-button-text"
         icon="pi pi-plus"
         iconPos="left"
+        [@fadeInOut] = "!this.qrSelection ? 'shown' : 'hidden'"
         [hidden]="this.qrSelection"
         (onClick)="this.passButtonAction.emit()"
       >
@@ -23,6 +24,7 @@
         styleClass="p-button-text"
         icon="pi pi-qrcode"
         iconPos="left"
+        [@fadeInOut] = "!this.qrSelection ? 'shown' : 'hidden'"
         [hidden]="this.qrSelection"
         (onClick)="this.switchQRSelectionState()"
       >
@@ -35,6 +37,7 @@
         styleClass="p-button-text"
         icon="pi pi-arrow-circle-left"
         iconPos="left"
+        [@fadeInOut] = "this.qrSelection ? 'shown' : 'hidden'"
         [hidden]="!this.qrSelection"
         (onClick)="this.switchQRSelectionState()"
       >
@@ -47,6 +50,7 @@
         styleClass="p-button-text"
         icon="pi pi-check-square"
         iconPos="left"
+        [@fadeInOut] = "this.qrSelection ? 'shown' : 'hidden'"
         [hidden]="!this.qrSelection"
         (onClick)="this.selectAll()"
       >
@@ -61,19 +65,22 @@
         styleClass="p-button-help p-button-text"
         icon="pi pi-info-circle"
         iconPos="left"
+        [hidden]="this.qrSelection"
+        [@fadeInOut] = "!this.qrSelection ? 'shown' : 'hidden'"
         (onClick)="op.toggle($event)"
       >
       </p-button>
 
       <p-button
-        id="quitButton"
+        id="helpButtonSelection"
         class="nav-item"
-        label="Quit"
-        styleClass="p-button-danger p-button-text"
-        icon="pi pi-power-off"
+        label="Help"
+        styleClass="p-button-help p-button-text"
+        icon="pi pi-info-circle"
         iconPos="left"
-        [hidden]="this.qrSelection"
-        (onClick)="this.exitAction.emit()"
+        [hidden]="!this.qrSelection"
+        [@fadeInOut] = "this.qrSelection ? 'shown' : 'hidden'"
+        (onClick)="op.toggle($event)"
       >
       </p-button>
 
@@ -81,9 +88,10 @@
         id="exportButton"
         class="nav-item"
         label="Export"
-        styleClass="p-button-help p-button-text"
+        styleClass="p-button-danger p-button-text"
         icon="pi pi-external-link"
         iconPos="left"
+        [@fadeInOut] = "this.qrSelection ? 'shown' : 'hidden'"
         [hidden]="!this.qrSelection"
         (onClick)="this.exportQR()"
       >

@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {fadeInOut} from "../../../route-animations";
 
 @Component({
   selector: 'app-navigation-bar',
   templateUrl: './navigation-bar.component.html',
-  styleUrls: ['./navigation-bar.component.scss']
+  styleUrls: ['./navigation-bar.component.scss'],
+  animations: [fadeInOut]
 })
 export class NavigationBarComponent{
   @Output('passButtonAction') passButtonAction = new EventEmitter<void>;
   @Output('qrExportAction') qrExportAction = new EventEmitter<void>;
-  @Output('exitAction') exitAction = new EventEmitter<void>;
   @Output('qrSelectionAction') qrSelectionChange = new EventEmitter<boolean>;
   @Output('selectAllAction') selectAllEvent = new EventEmitter<void>;
 

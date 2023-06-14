@@ -1,80 +1,99 @@
-<img ngSrc="/assets/home-page.jpg" fill priority alt="">
+<div style="position: relative; width: 100vw; height: 100vh">
+  <img [@fadeInOut] = "this.QRSelectionState ? 'hidden' : 'shown'"  ngSrc="/assets/home-page.jpg" fill priority alt="">
+  <img [@fadeInOut] = "!this.QRSelectionState ? 'hidden' : 'shown'" ngSrc="/assets/qr-home-selection.jpg" fill priority alt="">
 
-<div id="homeContainer">
-  <app-navigation-bar
-    (passButtonAction)="this.setNewPassword()"
-    (qrExportAction)="this.exportQR()"
-    (exitAction)="this.exitApp()"
-    (qrSelectionAction)="this.extractSelectedState($event)"
-    (selectAllAction)="this.selectAllAction()"
-  ></app-navigation-bar>
+  <div id="homeContainer">
+    <app-navigation-bar
+      (passButtonAction)="this.setNewPassword()"
+      (qrExportAction)="this.exportQR()"
+      (qrSelectionAction)="this.extractSelectedState($event)"
+      (selectAllAction)="this.selectAllAction()"
+    ></app-navigation-bar>
 
-  <p-card>
-    <ng-container *ngIf="this.noPasswordEntries">
-        <div id="noEntryContainer">
-          <h1 style="text-align: center">There are no password entries configured!</h1>
-            <p-divider></p-divider>
-            <br>
-            <h3 style="text-align: center">
-              You can press the "New Password" button or press
-              <a routerLink="/newPassword">here</a>
-              .
-            </h3>
+
+    <p-card>
+      <ng-container *ngIf="this.noPasswordEntries">
+          <div id="noEntryContainer">
+            <h1 style="text-align: center">There are no password entries configured!</h1>
+              <p-divider></p-divider>
+              <br>
+              <h3 style="text-align: center">
+                You can press the "New Password" button or press
+                <a routerLink="/newPassword">here</a>
+                .
+              </h3>
+          </div>
+      </ng-container>
+
+      <ng-container *ngIf="!this.noPasswordEntries">
+        <div id="searchBar" class="p-inputgroup">
+          <button
+            type="button"
+            pButton icon="pi pi-search"
+            (click)="this.filterPasswords()"
+          ></button>
+          <input
+            type="text"
+            pInputText
+            placeholder="Search by username or website"
+            [(ngModel)]="this.searchValue"
+            (keyup.enter)="this.filterPasswords()"
+          />
         </div>
-    </ng-container>
 
-    <ng-container *ngIf="!this.noPasswordEntries">
-      <div id="searchBar" class="p-inputgroup">
-        <button
-          type="button"
-          pButton icon="pi pi-search"
-          (click)="this.filterPasswords()"
-        ></button>
-        <input
-          type="text"
-          pInputText
-          placeholder="Search by username or website"
-          [(ngModel)]="this.searchValue"
-          (keyup.enter)="this.filterPasswords()"
-        />
-      </div>
+        <div id="metadataList">
+          <div style="display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start;">
+            <ng-container *ngFor="let metadata of this.filteredPasswords.slice(this.firstIndex, this.lastIndex); last as last">
+              <div
+                [hidden]="!this.QRSelectionState"
+                [@fadeInOut]="this.QRSelectionState ? 'shown' : 'hidden'">
+                <app-password-metadata
+                  [metadata]="metadata"
+                  [selectionEvent]="this.QRSelectionState"
+                  [checked]="this.selectedPasswords.includes(metadata)"
+                  (generateEvent)="this.confirmGeneratePassword($event)"
+                  (deleteEvent)="this.confirmDeletePassword($event)"
+                  (checkboxEvent)="this.setSelectedMetadata($event)"
+                >
+                </app-password-metadata>
+              </div>
 
-      <div id="metadataList">
-        <ng-container *ngFor="let metadata of this.filteredPasswords.slice(this.firstIndex, this.lastIndex); last as last">
-          <div>
-            <app-password-metadata
-              [metadata]="metadata"
-              [selectionEvent]="this.QRSelectionState"
-              [checked]="this.selectedPasswords.includes(metadata)"
-              (generateEvent)="this.confirmGeneratePassword($event)"
-              (deleteEvent)="this.confirmDeletePassword($event)"
-              (checkboxEvent)="this.setSelectedMetadata($event)"
-            >
-            </app-password-metadata>
+              <div
+                [hidden]="this.QRSelectionState"
+                [@fadeInOut]="!this.QRSelectionState ? 'shown' : 'hidden'">
+                <app-password-metadata
+                  [metadata]="metadata"
+                  [selectionEvent]="this.QRSelectionState"
+                  [checked]="this.selectedPasswords.includes(metadata)"
+                  (generateEvent)="this.confirmGeneratePassword($event)"
+                  (deleteEvent)="this.confirmDeletePassword($event)"
+                  (checkboxEvent)="this.setSelectedMetadata($event)"
+                >
+                </app-password-metadata>
+              </div>
+
+              <ng-container *ngIf="!last">
+                <p-divider></p-divider>
+              </ng-container>
+            </ng-container>
           </div>
 
-          <ng-container *ngIf="!last">
-            <p-divider></p-divider>
-          </ng-container>
-        </ng-container>
-
-        <p-paginator
-          (onPageChange)="onPageChange($event)"
-          [first]=0
-          [rows]=5
-          [totalRecords]="this.filteredPasswords.length">
-        </p-paginator>
-      </div>
-    </ng-container>
-  </p-card>
+          <p-paginator
+            (onPageChange)="onPageChange($event)"
+            [first]=0
+            [rows]=5
+            [totalRecords]="this.filteredPasswords.length">
+          </p-paginator>
+        </div>
+      </ng-container>
+    </p-card>
+  </div>
 </div>
-
 <!-- Pop-up and confirmDialog HTML-->
-<p-toast position="bottom-right"></p-toast>
 
 <p-confirmDialog #dialog [style]="{width: '50vw'}">
   <ng-template pTemplate="footer">
-    <ng-container *ngIf="this.generatePassword">
+    <ng-container *ngIf="this.startGeneratePassword">
       <div id="masterPassFooter" style="text-align: left">
         <label style="font-size: 17px">Master Password</label><br>
         <input
@@ -97,9 +116,32 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="!this.generatePassword">
+    <ng-container *ngIf="!this.startGeneratePassword">
       <button type="button" pButton icon="pi pi-times" label="No" (click)="dialog.reject()"></button>
       <button type="button" pButton icon="pi pi-check" label="Yes" (click)="dialog.accept()"></button>
     </ng-container>
   </ng-template>
 </p-confirmDialog>
+
+<p-dialog
+  header="Password Generation"
+  [(visible)]="this.passwordGeneratedDialogue"
+  (close)="this.resetGeneratedPassword()"
+  [style]="{width: '35vw'}"
+  [modal]="true"
+  >
+    <ng-container *ngIf="this.generatedPassword.length === 0">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    </ng-container>
+
+    <ng-container *ngIf="this.generatedPassword.length > 0">
+      <h6>Password has been generated successfully!</h6>
+      <br>
+      <input pInputText type="text" disabled=true [(ngModel)]="this.generatedPassword" />
+      <p-button
+        icon="pi pi-copy"
+        styleclass="p-button-rounded p-button-text p-button-raised"
+        (onClick)="this.copyToClipboard()">
+    </p-button>
+    </ng-container>
+</p-dialog>

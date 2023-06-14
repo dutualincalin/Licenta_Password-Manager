@@ -2,6 +2,7 @@ package org.PasswordManager.controller;
 
 import org.PasswordManager.model.PasswordMetadata;
 import org.PasswordManager.service.PasswordService;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,9 +34,9 @@ public class PasswordController {
 
     @DeleteMapping("/delPassMeta")
     public ResponseEntity<Void> deletePasswordMetadata(
-        @Validated @RequestBody PasswordMetadata passwordMetadata
+        @RequestParam String id
     ) {
-        passwordService.removePasswordMetadata(passwordMetadata);
+        passwordService.removePasswordMetadata(id);
         return ResponseEntity.status(200).build();
     }
 
@@ -47,9 +48,11 @@ public class PasswordController {
     @GetMapping("/generatePassword")
     public ResponseEntity<String> generatePassword(
         @RequestParam String masterPass,
-        @Validated @RequestBody PasswordMetadata passwordMetadata
+        @RequestParam String id
     ) {
-        return ResponseEntity.status(201)
-            .body(passwordService.generatePassword(masterPass, passwordMetadata));
+        return ResponseEntity.status(201).body(new JSONObject()
+            .put("passKey", passwordService.generatePassword(masterPass, id))
+            .toString()
+        );
     }
 }
