@@ -1,8 +1,8 @@
 package org.PasswordManager.mapper;
 
 
-import org.PasswordManager.exceptions.InternalServerErrorException;
-import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.exceptions.InternalServerException;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.PasswordManager.utility.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,52 +24,63 @@ import java.util.Base64;
 public interface PasswordMapper {
     PasswordMapper instance = Mappers.getMapper(PasswordMapper.class);
 
+
+    /**
+     ** Image conversion method
+     ************************************************************************************/
     default String imageToBase64String(BufferedImage image, String type) {
-        String imageString;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
         try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(image, type, bos);
-            byte[] imageBytes = bos.toByteArray();
 
-            imageString = Base64.getEncoder().encodeToString(imageBytes);
+            String imageString = Base64.getEncoder().encodeToString(bos.toByteArray());
             bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new InternalServerErrorException();
-        }
 
-        return imageString;
+            return imageString;
+        } catch (IOException e) {
+            throw new InternalServerException();
+        }
     }
 
-    default JSONObject passwordMetadataToJSON(PasswordMetadata passwordMetadata) {
-        JSONObject passParamsObject = new JSONObject()
-            .put("id", passwordMetadata.getId())
-            .put("website", passwordMetadata.getWebsite())
-            .put("version", passwordMetadata.getVersion())
-            .put("length", passwordMetadata.getLength())
-            .put("date", Utils.DATE_FORMAT.format(passwordMetadata.getCreationDate()));
 
-        if (passwordMetadata.getUsername() != null) {
-            passParamsObject.put("username", passwordMetadata.getUsername());
+    /**
+     ** Password Configuration conversion methods
+     ************************************************************************************/
+
+    default JSONObject passwordConfigurationToJSON(PasswordConfiguration passwordConfiguration) {
+        JSONObject passParamsObject = new JSONObject()
+            .put("id", passwordConfiguration.getId())
+            .put("website", passwordConfiguration.getWebsite())
+            .put("version", passwordConfiguration.getVersion())
+            .put("length", passwordConfiguration.getLength())
+            .put("date", Utils.DATE_FORMAT.format(passwordConfiguration.getCreationDate()));
+
+        if (passwordConfiguration.getUsername() != null) {
+            passParamsObject.put("username", passwordConfiguration.getUsername());
         }
 
         return passParamsObject;
     }
 
-    default String passwordMetadataListToJSON(ArrayList<PasswordMetadata> metaList) {
+    default String passwordConfiguratonListToJSON(ArrayList<PasswordConfiguration> metaList) {
         if (metaList.isEmpty()) {
-            return "";
+            return "[]";
         }
+
         JSONArray metaListArray = new JSONArray();
-        metaList.forEach(metadata -> metaListArray.put(passwordMetadataToJSON(metadata)));
+        metaList.forEach(metadata -> metaListArray.put(passwordConfigurationToJSON(metadata)));
         return metaListArray.toString();
     }
 
-    default PasswordMetadata jsonToPasswordMetadata(JSONObject metadataObject) {
-        PasswordMetadata passwordMetadata;
+
+    /**
+     ** JSON conversion methods
+     ************************************************************************************/
+
+    default PasswordConfiguration jsonToPasswordConfiguration(JSONObject metadataObject) {
+        PasswordConfiguration passwordConfiguration;
         try {
-            passwordMetadata = new PasswordMetadata(
+            passwordConfiguration = new PasswordConfiguration(
                 metadataObject.getString("website"),
                 null,
                 metadataObject.getInt("version"),
@@ -77,26 +88,26 @@ public interface PasswordMapper {
                 Utils.DATE_FORMAT.parse(metadataObject.getString("date"))
             );
 
-            passwordMetadata.setId(metadataObject.getString("id"));
+            passwordConfiguration.setId(metadataObject.getString("id"));
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new InternalServerErrorException();
+            throw new InternalServerException();
         }
 
         if(metadataObject.has("username")) {
-            passwordMetadata.setUsername(metadataObject.getString("username"));
+            passwordConfiguration.setUsername(metadataObject.getString("username"));
         }
 
-        return passwordMetadata;
+        return passwordConfiguration;
     }
 
-    default ArrayList<PasswordMetadata> jsonToPasswordMetadataList(String metaListString) {
+    default ArrayList<PasswordConfiguration> jsonToPasswordConfigurationList(String metaListString) {
         int i;
         JSONArray metaListArray = new JSONArray(metaListString);
-        ArrayList<PasswordMetadata> metaList = new ArrayList<>();
+        ArrayList<PasswordConfiguration> metaList = new ArrayList<>();
 
         for(i = 0; i < metaListArray.length(); i++) {
-            metaList.add(jsonToPasswordMetadata(metaListArray.getJSONObject(i)));
+            metaList.add(jsonToPasswordConfiguration(metaListArray.getJSONObject(i)));
         }
 
         return metaList;

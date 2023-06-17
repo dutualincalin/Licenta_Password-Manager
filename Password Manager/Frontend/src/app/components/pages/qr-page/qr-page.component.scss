@@ -3,8 +3,12 @@ p-card {
   top: 17vh;
   left: 36.8vw;
   width: 500px;
-  height: 500px;
-  padding: 0;
+}
+
+#QRPageButtons {
+  display: flex;
+  justify-content: space-between;
+  padding: 1vh;
 }
 
 

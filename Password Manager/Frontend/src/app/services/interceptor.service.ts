@@ -7,8 +7,7 @@ import {ConfigurationService} from "./configuration.service";
 
 @Injectable()
 export class InterceptorService implements HttpInterceptor {
-  constructor(private cookieService: CookieService, private configurationService: ConfigurationService) {
-  }
+  constructor(private cookieService: CookieService, private configurationService: ConfigurationService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (request.method === 'GET') {
@@ -18,7 +17,7 @@ export class InterceptorService implements HttpInterceptor {
     this.cookieService.deleteAll();
 
     return this.configurationService.init().pipe(
-      switchMap(response => {
+      switchMap(() => {
         const csrfToken = this.cookieService.get('XSRF-TOKEN') || '';
 
         if (csrfToken !== '') {

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
-import {PasswordMetadata} from "../objects/passwordMetadata";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {PasswordConfiguration} from "../objects/passwordConfiguration";
 
 
 @Injectable({providedIn: 'root'})
@@ -11,17 +11,23 @@ export class QrService{
   constructor(protected http: HttpClient) {
   }
 
-  readQR(QRPath: string): Observable<HttpResponse<void>> {
-    QRPath = QRPath.trim();
-    let options = new HttpParams().set('path', QRPath);
-    return this.http.get<void>(`${this.resourceUrl}/readQR`, {params: options, observe: 'response'});
+  /**
+   ** QR methods
+   ************************************************************************************/
+
+  readQR(qrPayload: string): Observable<HttpResponse<void>> {
+    return this.http.post<void>(
+      `${this.resourceUrl}/readQR`,
+      qrPayload,
+      {observe: 'response', withCredentials: true}
+    );
   }
 
-  exportQR(passwordMetadataList: PasswordMetadata[]): Observable<HttpResponse<{[index: string]: string}>> {
-    return this.http.post<{}>(
+  exportQR(passwordMetadataList: PasswordConfiguration[]): Observable<Blob> {
+    return this.http.post(
       `${this.resourceUrl}/exportQR`,
       passwordMetadataList,
-      {observe: 'response', withCredentials: true}
+      {responseType: 'blob', withCredentials: true}
     );
   }
 }

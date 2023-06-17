@@ -36,6 +36,10 @@ import { CookieService } from 'ngx-cookie-service';
 import {InterceptorService} from "./services/interceptor.service";
 import {DialogModule} from "primeng/dialog";
 import {RippleModule} from "primeng/ripple";
+import { QrScannerComponent } from './components/ui-elements/qr-scanner/qr-scanner.component';
+import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
+import {MenuModule} from "primeng/menu";
+import { ImageUploaderComponent } from './components/ui-elements/image-uploader/image-uploader.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,8 @@ import {RippleModule} from "primeng/ripple";
     CreatePasswordPageComponent,
     QrPageComponent,
     NotFoundPageComponent,
+    QrScannerComponent,
+    ImageUploaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +83,9 @@ import {RippleModule} from "primeng/ripple";
       headerName: 'X-XSRF-TOKEN'
     }),
     DialogModule,
-    RippleModule
+    RippleModule,
+    MenuModule,
+    NgxScannerQrcodeModule
   ],
   providers: [
     ConfirmationService,

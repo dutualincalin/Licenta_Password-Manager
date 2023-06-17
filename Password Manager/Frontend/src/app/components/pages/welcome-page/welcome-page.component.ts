@@ -1,10 +1,11 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {fadeInOut} from "../../../route-animations";
 import {ConfigurationService} from "../../../services/configuration.service";
 import {MessageService} from "primeng/api";
 import AsyncLock from "async-lock";
 import {AppComponent} from "../../../app.component";
+import {QrService} from "../../../services/qr.service";
 
 @Component({
   selector: 'app-welcome-page',
@@ -12,16 +13,20 @@ import {AppComponent} from "../../../app.component";
   styleUrls: ['./welcome-page.component.scss'],
   animations: [fadeInOut],
 })
-export class WelcomePageComponent implements AfterViewInit{
-  welcomeShow = false;
-  loadingShow = false;
-  uploadLoading = false;
-
+export class WelcomePageComponent implements OnInit{
   private lock = new AsyncLock({timeout:2000});
 
-  showProgressBar = false;
-  loadingProgress: number = 0;
+  showWelcome = false;
+  loadingShow = false;
+  uploading = false;
 
+  showProgressBar = false;
+  progressBarLoading: number = 0;
+
+  startQRScanningEvent: EventEmitter<void> = new EventEmitter<void>();
+  showQRDialog = false;
+
+  showImgDialog = false;
   imgLoaded = true;
   imgFileURL: string = "";
   imgFile: File;
@@ -31,10 +36,11 @@ export class WelcomePageComponent implements AfterViewInit{
     private configurationService: ConfigurationService,
     private messageService: MessageService,
     private appComponent: AppComponent,
+    private qrService: QrService,
   ) {
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.lock.acquire('initWelcome', () => {
       if (!this.appComponent.appStarted) {
         this.appComponent.appStarted = true;
@@ -47,33 +53,33 @@ export class WelcomePageComponent implements AfterViewInit{
 
   async initWelcome() {
     await this.sleep(1000);
-    this.welcomeShow = true;
+    this.showWelcome = true;
 
     await this.sleep(1500);
-    this.welcomeShow = false
+    this.showWelcome = false
 
     await this.sleep(1000);
     this.loadingShow = true;
     this.showProgressBar = true;
 
     await this.sleep(1000);
-    this.loadingProgress = 20;
+    this.progressBarLoading = 20;
 
     await this.sleep(1000);
-    this.loadingProgress = 40;
+    this.progressBarLoading = 40;
 
     this.configurationService.gather().subscribe({
       next: async () => {
-        this.loadingProgress = 80;
+        this.progressBarLoading = 80;
         await this.sleep(1000);
-        this.loadingProgress = 100;
+        this.progressBarLoading = 100;
         await this.sleep(1000);
         this.goToHomePage();
       },
 
       error: err => {
         if (err.status == 400) {
-          this.loadingProgress = 50;
+          this.progressBarLoading = 50;
           this.loadingShow = false;
           this.imgLoaded = false;
         }
@@ -94,8 +100,8 @@ export class WelcomePageComponent implements AfterViewInit{
   }
 
   onImgUpload() {
-    this.uploadLoading = true;
-    this.loadingProgress = 80;
+    this.uploading = true;
+    this.progressBarLoading = 80;
 
     if(this.imgFile && this.imgFile.type.startsWith('image/')) {
       const reader = new FileReader();
@@ -106,20 +112,24 @@ export class WelcomePageComponent implements AfterViewInit{
 
         this.configurationService.setImg(payload).subscribe({
           next: () => {
-            URL.revokeObjectURL(this.imgFileURL);
+            this.showImgDialog = false;
+            this.uploading = false;
+
+            this.progressBarLoading = 100;
+
             this.imgFileURL = "";
-            this.loadingProgress = 100;
-            this.uploadLoading = false;
+            URL.revokeObjectURL(this.imgFileURL);
             setTimeout(() => {this.goToHomePage()}, 1000);
           },
 
           error: () => {
-            this.uploadLoading = false;
-            this.loadingProgress = 50;
+            this.uploading = false;
+            this.progressBarLoading = 50;
+
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Something went wrong. Please try again.',
+              detail: 'Something went wrong. Please try again!',
               sticky: true
             });
           }
@@ -130,7 +140,48 @@ export class WelcomePageComponent implements AfterViewInit{
     }
   }
 
+  onQRUpload($event: string) {
+    this.uploading = true;
+    this.progressBarLoading = 80;
+
+    this.qrService.readQR($event).subscribe({
+      next: () => {
+        this.showQRDialog = false;
+        this.uploading = false;
+
+        this.progressBarLoading = 100;
+        setTimeout(() => {this.goToHomePage()}, 1000);
+      },
+
+      error: () => {
+        this.showQRDialog = false;
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Something went wrong. Please try again!',
+          sticky: true
+        });
+
+        this.startQRScanningEvent.emit();
+      }
+    });
+  }
+
+  QRStart() {
+    this.startQRScanningEvent.emit();
+    this.showQRDialog = true;
+  }
+
   goToHomePage() {
     this.router.navigate(['/home']);
+  }
+
+  QRCancel() {
+    this.showQRDialog = false;
+  }
+
+  imgCancel() {
+    this.showImgDialog = false;
   }
 }

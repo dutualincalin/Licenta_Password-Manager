@@ -1,0 +1,29 @@
+h1,
+h5,
+p {
+  font-weight: 600;
+  word-break: break-all;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#QRDialog{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 40vw;
+  height: 65vh;
+}
+
+#QRButtons{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+div {
+  text-align: center;
+  background: #fdfdfd;
+}

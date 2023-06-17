@@ -1,15 +1,15 @@
 package org.PasswordManager.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.PasswordManager.exceptions.ConfigurationIncompleteException;
-import org.PasswordManager.exceptions.DuplicatePasswordMetadataException;
-import org.PasswordManager.exceptions.EmptyListException;
+import org.PasswordManager.exceptions.app.IncompleteAppConfigurationException;
+import org.PasswordManager.exceptions.app.DifferentAppConfigurationException;
+import org.PasswordManager.exceptions.password.DuplicatePasswordConfigurationException;
+import org.PasswordManager.exceptions.password.EmptyPasswordConfigurationListException;
 import org.PasswordManager.exceptions.ExceededQRCapacityException;
-import org.PasswordManager.exceptions.InternalServerErrorException;
-import org.PasswordManager.exceptions.MissingPasswordMetadataException;
-import org.PasswordManager.exceptions.PasswordGenerationException;
-import org.PasswordManager.exceptions.WrongPasswordMetadataExceptions;
-import org.PasswordManager.exceptions.WrongPathException;
+import org.PasswordManager.exceptions.InternalServerException;
+import org.PasswordManager.exceptions.password.MissingPasswordConfigurationException;
+import org.PasswordManager.exceptions.WrongMetadataException;
+import org.PasswordManager.exceptions.WrongFilePathException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(InternalServerErrorException.class)
+    @ExceptionHandler(InternalServerException.class)
     public final ResponseEntity<Object> handleInternalServerExceptions(
         Exception exception,
         WebRequest request
@@ -36,7 +36,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ConfigurationIncompleteException.class)
+    @ExceptionHandler(IncompleteAppConfigurationException.class)
     public final ResponseEntity<Object> handleConfigurationIncompleteException(
         Exception exception,
         WebRequest request
@@ -52,12 +52,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
-        WrongPathException.class,
-        DuplicatePasswordMetadataException.class,
-        WrongPasswordMetadataExceptions.class,
-        PasswordGenerationException.class,
-        EmptyListException.class,
-        MissingPasswordMetadataException.class
+        WrongFilePathException.class,
+        DuplicatePasswordConfigurationException.class,
+        WrongMetadataException.class,
+        EmptyPasswordConfigurationListException.class,
+        MissingPasswordConfigurationException.class,
+        DifferentAppConfigurationException.class
     })
     public final ResponseEntity<Object> handleBadRequestExceptions(
         Exception exception,

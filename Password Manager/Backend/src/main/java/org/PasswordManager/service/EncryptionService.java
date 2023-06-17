@@ -1,6 +1,6 @@
 package org.PasswordManager.service;
 
-import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EncryptionService {
-    private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
-
     private final TextEncryptor textEncryptor;
-
+    private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
 
     public EncryptionService(){
@@ -22,9 +20,10 @@ public class EncryptionService {
         int ARGON2_HASH_ITERATIONS = 10;
         int ARGON2_HASH_SIZE = 64;
         int ARGON2_THREAD_NUM = 4;
-        int ARGON2_MEMORY = 1048576;
+        int ARGON2_MEMORY = 262144;
 
         String token = "reganaMdrowssaP";
+        String TEXT_SALT = "53616c747953616c7479726567616e614d64726f777373615053616c7453616c74";
 
         this.pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder(
                 token + "pbkdf2",
@@ -42,26 +41,31 @@ public class EncryptionService {
             ARGON2_HASH_ITERATIONS
         );
 
-        textEncryptor = Encryptors.text(
-            token + "config",
-            "53616c747953616c7479726567616e614d64726f777373615053616c7453616c74"
-        );
+        textEncryptor = Encryptors.text(token + "config", TEXT_SALT);
     }
+
+
+    /**
+     ** Encryption methods
+     ************************************************************************************/
 
     public String encryptImage(String imageString) {
         return pbkdf2PasswordEncoder.encode(imageString);
     }
 
-    public String encryptPassword(String imgHash, PasswordMetadata passwordMetadata, String master) {
-        return argon2PasswordEncoder.encode(
-            imgHash + passwordMetadata.toString() + master
-        );
+    public String encryptPassword(String imgHash, PasswordConfiguration passwordConfiguration, String master) {
+        return argon2PasswordEncoder
+            .encode(imgHash + passwordConfiguration.toString() + master);
     }
 
     public String encryptText(String text) {
         return textEncryptor.encrypt(text);
     }
 
+
+    /**
+     ** Decryption method
+     ************************************************************************************/
     public String decryptText(String hash) {
         return textEncryptor.decrypt(hash);
     }

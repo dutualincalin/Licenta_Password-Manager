@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {fadeInOut} from "../../../route-animations";
+import {MenuItem, PrimeIcons} from "primeng/api";
 
 @Component({
   selector: 'app-navigation-bar',
@@ -12,17 +13,33 @@ export class NavigationBarComponent{
   @Output('qrExportAction') qrExportAction = new EventEmitter<void>;
   @Output('qrSelectionAction') qrSelectionChange = new EventEmitter<boolean>;
   @Output('selectAllAction') selectAllEvent = new EventEmitter<void>;
+  @Output('qrImportAction') qrImportAction = new EventEmitter<void>;
 
-  qrSelection: boolean = false;
+  protected readonly PrimeIcons = PrimeIcons;
+
+  qrSelectionState: boolean = false;
+  items: MenuItem[] = [
+    {
+      label: "Export to QR",
+      icon: PrimeIcons.FILE_EXPORT,
+      command: () => this.switchQRSelectionState()
+    },
+
+    {
+      label: "Import from QR",
+      icon: PrimeIcons.FILE_IMPORT,
+      command: () => this.qrImportAction.emit()
+    }
+  ];
 
   switchQRSelectionState() {
-    this.qrSelection = !this.qrSelection;
-    this.qrSelectionChange.emit(this.qrSelection);
+    this.qrSelectionState = !this.qrSelectionState;
+    this.qrSelectionChange.emit(this.qrSelectionState);
   }
 
   exportQR() {
-    this.switchQRSelectionState();
     this.qrExportAction.emit();
+    this.switchQRSelectionState();
   }
 
   selectAll() {

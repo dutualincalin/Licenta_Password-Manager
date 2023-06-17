@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
 import {PasswordService} from "../../../services/password.service";
@@ -9,6 +9,10 @@ import {PasswordService} from "../../../services/password.service";
   styleUrls: ['./create-password-page.component.scss']
 })
 export class CreatePasswordPageComponent{
+  @ViewChild('formUsername') formUsername: ElementRef<HTMLInputElement>;
+  @ViewChild('formWebsite') formWebsite: ElementRef<HTMLInputElement>;
+  @ViewChild('formVersion') formVersion: ElementRef<HTMLInputElement>;
+
   website: string = "";
   username: string = "";
   version: number = 0;
@@ -20,40 +24,37 @@ export class CreatePasswordPageComponent{
     private passwordService: PasswordService) {
   }
 
-  checkVersion(): boolean {
-    let versionInput = document.getElementById("versionInput");
-    if (this.version != null && this.version > -1) {
-      versionInput!.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
-      return true;
-    } else {
-      versionInput!.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
-      return false;
-    }
-  }
-
   checkUsername(): boolean {
-    let usernameInput = document.getElementById("usernameInput");
     let usernameRegex = new RegExp("^[A-Za-z][A-Za-z0-9_]{0,20}$");
 
     if(usernameRegex.test(this.username) || this.username == ""){
-      usernameInput!.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
+      this.formUsername.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
       return true;
     } else {
-      usernameInput!.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      this.formUsername.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
       return false;
     }
   }
 
   checkWebsite(): boolean {
-    let websiteInput = document.getElementById("websiteInput");
     let websiteRegex=
       new RegExp(/^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]+.[a-z]{2,3}(\/[a-z]+)*$/);
 
     if(websiteRegex.test(this.website)) {
-      websiteInput!.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched";
+      this.formWebsite.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched";
       return true;
     } else {
-      websiteInput!.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      this.formWebsite.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      return false;
+    }
+  }
+
+  checkVersion(): boolean {
+    if (this.version != null && this.version > -1) {
+      this.formVersion.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
+      return true;
+    } else {
+      this.formVersion.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
       return false;
     }
   }
@@ -80,7 +81,7 @@ export class CreatePasswordPageComponent{
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'The Website input didn\'t match the pattern!',
+        detail: 'The Website input doesn\'t match the pattern!',
         sticky: true
       });
     }
@@ -113,11 +114,11 @@ export class CreatePasswordPageComponent{
         this.router.navigate(["/home"]);
       },
 
-      error: () => {
+      error: err => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'An error has occurred. Please try again!',
+          detail: err.error,
           sticky: true
         });
       }

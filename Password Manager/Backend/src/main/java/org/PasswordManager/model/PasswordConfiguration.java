@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class PasswordMetadata {
+public class PasswordConfiguration {
     private String id;
     private final String website;
     private String username;
@@ -17,8 +17,8 @@ public class PasswordMetadata {
     private int length;
     private Date creationDate;
 
-    public PasswordMetadata(String website, String username, int version, int length,
-                             Date creationDate) {
+    public PasswordConfiguration(String website, String username, int version, int length,
+                                 Date creationDate) {
         this.id = UUID.randomUUID().toString();
         this.website = website;
         this.username = username;
@@ -32,11 +32,11 @@ public class PasswordMetadata {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof PasswordMetadata)) {
+        if (!(o instanceof PasswordConfiguration)) {
             return false;
         }
 
-        PasswordMetadata that = (PasswordMetadata) o;
+        PasswordConfiguration that = (PasswordConfiguration) o;
 
         if (getVersion() != that.getVersion()) {
             return false;

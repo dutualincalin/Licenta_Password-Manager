@@ -1,7 +1,6 @@
 package org.PasswordManager.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.PasswordManager.PasswordManager;
 import org.PasswordManager.service.ConfigurationService;
 import org.PasswordManager.service.PasswordService;
 import org.springframework.http.ResponseEntity;
@@ -30,34 +29,39 @@ public class ConfigurationController {
         this.passwordService = passwordService;
     }
 
+    /**
+     ** CSRF protocol endpoint
+     ************************************************************************************/
+
     @GetMapping("/getCSRF")
     public ResponseEntity<Void> getCSRFToken() {
         return ResponseEntity.status(201).build();
     }
+
+
+    /**
+     ** App configuration endpoints
+     ************************************************************************************/
 
     @PostMapping("/imgConfig")
     public ResponseEntity<Void> setImageConfiguration(
         @Validated @RequestBody Map<String, String> payload
     ) {
         String imgData = payload.get("image");
+        log.warn(imgData);
         configurationService.setConfigurationImage(imgData);
         return ResponseEntity.status(200).build();
     }
 
     @GetMapping("/configSave")
     public ResponseEntity<Void> saveAppConfig() {
-        configurationService.saveConfiguration(passwordService.getPasswordMetadataList());
+        configurationService.saveConfiguration(passwordService.getPasswordConfigurationList());
         return ResponseEntity.status(200).build();
     }
 
     @GetMapping("/configGather")
     public ResponseEntity<Void> gatherAppConfig() {
-        passwordService.setPasswordMetadataList(configurationService.gatherConfiguration());
+        passwordService.setPasswordConfigurationList(configurationService.gatherConfiguration());
         return ResponseEntity.status(200).build();
-    }
-
-    @GetMapping("/shutdown")
-    public void shutdownApp() {
-        PasswordManager.shutdown();
     }
 }

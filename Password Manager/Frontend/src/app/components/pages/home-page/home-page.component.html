@@ -5,19 +5,19 @@
   <div id="homeContainer">
     <app-navigation-bar
       (passButtonAction)="this.setNewPassword()"
+      (qrImportAction)="this.startImportFromQR()"
       (qrExportAction)="this.exportQR()"
       (qrSelectionAction)="this.extractSelectedState($event)"
       (selectAllAction)="this.selectAllAction()"
     ></app-navigation-bar>
 
-
     <p-card>
       <ng-container *ngIf="this.noPasswordEntries">
           <div id="noEntryContainer">
-            <h1 style="text-align: center">There are no password entries configured!</h1>
+            <h1>There are no password entries configured!</h1>
               <p-divider></p-divider>
               <br>
-              <h3 style="text-align: center">
+              <h3>
                 You can press the "New Password" button or press
                 <a routerLink="/newPassword">here</a>
                 .
@@ -41,8 +41,8 @@
           />
         </div>
 
-        <div id="metadataList">
-          <div style="display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start;">
+        <div id="passwordConfigurationList">
+          <div>
             <ng-container *ngFor="let metadata of this.filteredPasswords.slice(this.firstIndex, this.lastIndex); last as last">
               <div
                 [hidden]="!this.QRSelectionState"
@@ -93,16 +93,11 @@
 
 <p-confirmDialog #dialog [style]="{width: '50vw'}">
   <ng-template pTemplate="footer">
-    <ng-container *ngIf="this.startGeneratePassword">
-      <div id="masterPassFooter" style="text-align: left">
-        <label style="font-size: 17px">Master Password</label><br>
-        <input
-          pInputText
-          id="masterInput"
-          [(ngModel)]="this.master"
-          (ngModelChange)="this.checkMaster()"
-        /> <br>
-        <label style="font-size: 12px">Insert your master password here.</label>
+    <ng-container *ngIf="this.showMasterPasswordDialog">
+      <div id="masterPassFooter">
+        <label>Master Password</label><br>
+        <input #masterInput pInputText [(ngModel)]="this.master"/> <br>
+        <label id="masterPassTip">Insert your master password here.</label>
 
         <br>
         <br>
@@ -116,7 +111,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="!this.startGeneratePassword">
+    <ng-container *ngIf="!this.showMasterPasswordDialog">
       <button type="button" pButton icon="pi pi-times" label="No" (click)="dialog.reject()"></button>
       <button type="button" pButton icon="pi pi-check" label="Yes" (click)="dialog.accept()"></button>
     </ng-container>
@@ -125,23 +120,41 @@
 
 <p-dialog
   header="Password Generation"
-  [(visible)]="this.passwordGeneratedDialogue"
+  [style]="{width: '30vw'}"
+  [(visible)]="this.showPasswordGeneratedDialog"
   (close)="this.resetGeneratedPassword()"
-  [style]="{width: '35vw'}"
   [modal]="true"
+  (onHide)="this.finishPasswordGeneration()"
   >
     <ng-container *ngIf="this.generatedPassword.length === 0">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <i id="generationSpinner" class="pi pi-spin pi-spinner"></i>
     </ng-container>
 
     <ng-container *ngIf="this.generatedPassword.length > 0">
       <h6>Password has been generated successfully!</h6>
       <br>
-      <input pInputText type="text" disabled=true [(ngModel)]="this.generatedPassword" />
+      <input pInputText type="text" disabled=true [(ngModel)]="this.generatedPassword"/>
+
       <p-button
         icon="pi pi-copy"
         styleclass="p-button-rounded p-button-text p-button-raised"
         (onClick)="this.copyToClipboard()">
-    </p-button>
+      </p-button>
     </ng-container>
+</p-dialog>
+
+<p-dialog
+  [modal]="true"
+  [visible]="this.showQRImportDialogue"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+  header="Scan your QR Code"
+>
+  <app-qr-scanner
+    [QRStartScan]="this.startQRImportingEvent"
+    [uploading]="this.uploadingQR"
+    (QRUpload)="this.QRImport($event)"
+    (QRCancel)="this.QRCancel()"
+  ></app-qr-scanner>
 </p-dialog>

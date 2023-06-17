@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
-import {PasswordMetadata} from "../../../objects/passwordMetadata";
+import {PasswordConfiguration} from "../../../objects/passwordConfiguration";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {PaginatorState} from "primeng/paginator";
 import {fadeInOut} from "../../../route-animations";
@@ -15,16 +15,21 @@ import {QrService} from "../../../services/qr.service";
   styleUrls: ['./home-page.component.scss'],
   animations: [fadeInOut]
 })
-export class HomePageComponent {
-  passwordMetadataNum: number = 0;
-  passwordMetadataList: PasswordMetadata[] = [];
-  filteredPasswords: PasswordMetadata[] = [];
-  selectedPasswords: PasswordMetadata[] = [];
+export class HomePageComponent{
+  @ViewChild('masterInput') masterInput: ElementRef<HTMLInputElement>;
 
+  passwordMetadataList: PasswordConfiguration[] = [];
+  filteredPasswords: PasswordConfiguration[] = [];
+  selectedPasswords: PasswordConfiguration[] = [];
+  noPasswordEntries:boolean = false;
+  passwordMetadataNum: number = 0;
+
+  showQRImportDialogue = false;
   QRSelectionState = false;
-  startGeneratePassword = false;
-  passwordGeneratedDialogue = false;
-  noPasswordEntries = false;
+  uploadingQR:boolean = false;
+
+  showMasterPasswordDialog = false;
+  showPasswordGeneratedDialog = false;
 
   generatedPassword: string = "";
   master: string = "";
@@ -33,6 +38,8 @@ export class HomePageComponent {
   firstIndex: number = 0;
   lastIndex: number = 5;
 
+
+  protected startQRImportingEvent: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private router: Router,
@@ -47,6 +54,7 @@ export class HomePageComponent {
   }
 
   /************************************ Password Related ********************************************************/
+
   setNewPassword() {
     this.router.navigate(['/newPassword'])
   }
@@ -66,61 +74,55 @@ export class HomePageComponent {
           this.noPasswordEntries = false;
           this.filteredPasswords = this.passwordMetadataList.map((x) => x);
         }
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Data gathered',
-          detail: 'Password Metadata fetched successfully',
-
-        });
-      },
-
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Fetch fail',
-          detail: 'An error was encountered while fetching'
-        });
       }
     });
   }
 
-  confirmGeneratePassword(passwordMetadata: PasswordMetadata): void {
-    this.startGeneratePassword = true;
+  confirmGeneratePassword(passwordMetadata: PasswordConfiguration): void {
+    this.showMasterPasswordDialog = true;
     this.confirmationService.confirm({
       header: 'Generate Password',
 
       accept: () => {
-        this.passwordGeneratedDialogue = true;
+        this.showPasswordGeneratedDialog = true;
         this.passwordService.generate(this.master, passwordMetadata.id).subscribe({
           next: response => {
             this.generatedPassword = response.body ? response.body["passKey"] : "";
-            this.startGeneratePassword = false;
+            this.showMasterPasswordDialog = false;
+            this.master = '';
           },
 
           error: () => {
-            this.messageService.add({severity: 'error', summary: 'Generation Failed', detail: 'An error has occurred. Please try again!'});
-            this.startGeneratePassword = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Generation Failed',
+              detail: 'An error has occurred. Please try again!'
+            });
+            this.showMasterPasswordDialog = false;
           }
         })
       },
 
       reject: () => {
         this.messageService.add({severity: 'info', summary: 'Cancelled', detail: 'You have cancelled your action'});
-        this.startGeneratePassword = false;
+        this.showMasterPasswordDialog = false;
       }
     });
   }
 
-  confirmDeletePassword(passwordMetadata: PasswordMetadata): void {
+  confirmDeletePassword(passwordMetadata: PasswordConfiguration): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the password entry?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.passwordService.delete(passwordMetadata.id).subscribe({
-          error: () => {
-            this.messageService.add({severity: 'error', summary: 'Delete error', detail: 'An error has occurred. Please try again!'});
+          error: err => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Delete error',
+              detail: err.error
+            });
           },
 
           complete: () => {
@@ -137,7 +139,7 @@ export class HomePageComponent {
     });
   }
 
-  setSelectedMetadata($event: { passMeta: PasswordMetadata; selected: boolean }) {
+  setSelectedMetadata($event: { passMeta: PasswordConfiguration; selected: boolean }) {
     $event.selected ?
       this.selectedPasswords.push($event.passMeta) :
       this.selectedPasswords.splice(this.selectedPasswords.indexOf($event.passMeta), 1);
@@ -162,7 +164,7 @@ export class HomePageComponent {
     let masterInput = document.getElementById("masterInput");
 
     if (this.master == "") {
-      masterInput!.className = "p-inputtext p-component p-element ng-pristine ng-invalid ng-dirty ng-touched";
+      this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-invalid ng-dirty ng-touched";
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -171,29 +173,26 @@ export class HomePageComponent {
       });
       return false;
     } else {
-      masterInput!.className = "p-inputtext p-component p-element ng-pristine ng-valid ng-touched";
+      this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-valid ng-touched";
       return true;
     }
   }
 
   exportQR() {
-    // let qrPath = "/assets/QRCodes/QR_14_06_2023_20_52_48_742.png";
-    let qrPath: string = "/../QRCodes/QR_14_06_2023_20_56_23_044.png";
-    this.router.navigate(['/qr', qrPath], {skipLocationChange: true});
-    // this.qrService.exportQR(this.selectedPasswords).subscribe({
-    //   next: response => {
-    //     let qrPath = response.body ? response.body["qrPath"] : '';
-    //     console.log(qrPath);
-    //   },
-    //
-    //   error: () => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Export error',
-    //       detail: 'An error has occurred. Please try again!'
-    //     });
-    //   }
-    // });
+    this.qrService.exportQR(this.selectedPasswords).subscribe({
+      next: response => {
+        let qrPath = response ? URL.createObjectURL(response) : '';
+        this.router.navigate(['/qr', qrPath], {skipLocationChange: true});
+      },
+
+      error: err => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Export error',
+          detail: err.error
+        });
+      }
+    });
   }
 
   selectAllAction() {
@@ -227,5 +226,43 @@ export class HomePageComponent {
       this.firstIndex = $event.first;
       this.lastIndex = $event.first + $event.rows
     }
+  }
+
+  finishPasswordGeneration() {
+    this.showPasswordGeneratedDialog = false;
+    this.generatedPassword = '';
+  }
+
+
+  startImportFromQR() {
+    this.showQRImportDialogue = true;
+    this.startQRImportingEvent.emit();
+  }
+
+  QRCancel() {
+    this.showQRImportDialogue = false;
+  }
+
+  QRImport($event: string) {
+    this.uploadingQR = true;
+
+    this.qrService.readQR($event).subscribe({
+      next: () => {
+        this.showQRImportDialogue = false;
+        this.uploadingQR = false;
+        this.fetchPasswordMetadataList();
+      },
+
+      error: err => {
+        this.uploadingQR = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error,
+          sticky: true
+        });
+        this.startQRImportingEvent.emit();
+      }
+    });
   }
 }

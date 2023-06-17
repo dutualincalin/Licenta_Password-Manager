@@ -16,9 +16,8 @@ export class QrPageComponent implements OnInit{
     let path;
     this.activatedRoute.paramMap.subscribe(params => {
         path = params.get('path');
-        console.log(path);
     });
-    path ? this.qrPath = path : this.qrPath = "";
+    this.qrPath = path ? path : "";
   }
 
   goHome() {

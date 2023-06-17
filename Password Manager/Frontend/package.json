@@ -26,6 +26,7 @@
     "bootstrap-icons": "^1.10.5",
     "jquery": "^3.7.0",
     "ngx-cookie-service": "^16.0.0",
+    "ngx-scanner-qrcode": "^1.5.2",
     "primeicons": "^6.0.1",
     "primeng": "^16.0.0-rc.2",
     "rxjs": "~7.8.0",

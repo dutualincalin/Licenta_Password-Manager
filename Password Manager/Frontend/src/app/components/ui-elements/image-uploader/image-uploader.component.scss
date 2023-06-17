@@ -1,0 +1,29 @@
+#imageDialog {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 40vw;
+  height: 65vh;
+
+  & img{
+    width: 40vw;
+    height: 56vh;
+  }
+}
+
+#imageButtons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
+  & > div {
+    position: relative;
+
+    & input {
+      display: none;
+    }
+  }
+}

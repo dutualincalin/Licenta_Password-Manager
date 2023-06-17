@@ -27,42 +27,16 @@ export const slider =
 function slideTo(direction: string) {
   const optional = {optional: true};
 
-  if(direction == 'bottom') {
-    return [
-      query(':enter, :leave', [
-        style({
-          position: 'absolute',
-          left: 0,
-          top: '0',
-          width: '100%'
-        })
-      ], optional),
-
-      query(':enter', [
-        style({top: '100%'})
-      ]),
-
-      group([
-        query(':leave', [
-          animate('1s ease', style({top: '-100%'}))
-        ], optional),
-        query(':enter', [
-          animate('1s ease', style({top: '0%'}))
-        ], optional)
-      ])
-    ]
-  }
-
   let animatingQuery = [
     query(':enter', [
-      style({[direction]: '-100%'})
+      style({[direction === "bottom" ? 'top' : direction]: direction == "bottom" ? '100%' : '-100%'})
     ]),
     group([
       query(':leave', [
-        animate('1s ease', style({[direction]: '100%'}))
+        animate('1s ease', style({[direction === "bottom" ? 'top' : direction]: direction === "bottom" ? '-100%' : '100%'}))
       ], optional),
       query(':enter', [
-        animate('1s ease', style({[direction]: '0%'}))
+        animate('1s ease', style({[direction === "bottom" ? 'top' : direction]: '0%'}))
       ], optional)
     ])
   ];
@@ -82,13 +56,13 @@ function slideTo(direction: string) {
       );
       break;
 
-    case 'top':
+    default:
       animatingQuery.unshift(
         query(':enter, :leave', [
           style({
             position: 'absolute',
             left: 0,
-            [direction]: 0,
+            [direction === "bottom" ? 'top' : direction]: 0,
             width: '100%'
           })
         ], optional)

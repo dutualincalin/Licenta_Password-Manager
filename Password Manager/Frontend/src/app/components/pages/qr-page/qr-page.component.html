@@ -3,17 +3,11 @@
 
   <p-card id="qr-card">
     <ng-template pTemplate="header">
-      <img
-        alt="Invalid Qr Code Path"
-        [ngSrc]="this.qrPath"
-        width="500"
-        height="500"
-        priority
-      />
+      <img alt="Invalid Qr Code Path" [src]="this.qrPath"/>
     </ng-template>
 
     <ng-template pTemplate="content">
-      <div style="display: flex;justify-content: space-between;">
+      <div id="QRPageButtons">
         <span>
           <p-button
             icon="pi pi-download"

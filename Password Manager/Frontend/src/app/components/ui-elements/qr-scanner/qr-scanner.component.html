@@ -1,0 +1,42 @@
+<div id="QRDialog">
+  <div>
+    <p-dropdown
+      styleClass="relative"
+      (onChange)="action.playDevice(this.selectedDeviceId)"
+      [options]="this.devices"
+      [(ngModel)]="this.selectedDeviceId"
+    ></p-dropdown>
+
+    <ngx-scanner-qrcode
+      #action="scanner"
+      [config]="config"
+      (event)="onQRDetection($event, action)">
+    </ngx-scanner-qrcode>
+  </div>
+
+  <div id="QRButtons">
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      styleClass="p-button-secondary"
+      (onClick)="this.onQRStop()"
+    ></p-button>
+
+    <p-button
+      label="Rescan"
+      icon="pi pi-replay"
+      [disabled]="this.qrValue === ''"
+      (onClick)="this.onQRRescan()"
+    ></p-button>
+
+    <p-button
+      label="Upload"
+      icon="pi pi-upload"
+      styleClass="p-button-danger"
+      loadingIcon="pi pi-spin pi-spinner"
+      [loading]="this.uploading"
+      [disabled]="this.qrValue === ''"
+      (onClick)="this.onQRUpload()"
+    ></p-button>
+  </div>
+</div>

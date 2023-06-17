@@ -1,15 +1,15 @@
 h1 {
   text-align: center;
-  vertical-align: center;
   position: absolute;
-  width: 64.75vw;
-  height: 6vh;
+  width: 800px;
+  height: 80px;
   color: white;
+  bottom: 0;
 }
 
 .progress {
-  margin-top: 6vh;
-  width: 45vw;
+  margin-top: 2vh;
+  width: 50vw;
   height: 4vh;
   position: relative;
 }
@@ -26,4 +26,29 @@ h1 {
 
 #previewImg {
   border: 2mm ridge rgba(38, 247, 255, .6);
+}
+
+#welcomeFrame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 100vh;
+}
+
+#welcomeWriting {
+  position: relative;
+  width: 800px;
+  height: 80px;
+}
+
+#welcomeUploadOptions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 35vw;
+  height: 15vh;
+  align-items: center
 }

@@ -1,8 +1,7 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {RouterOutlet } from '@angular/router';
+import {Component, HostListener} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 import {slider} from "./route-animations";
 import {ConfigurationService} from "./services/configuration.service";
-import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-root',
@@ -12,34 +11,19 @@ import {MessageService} from "primeng/api";
     slider,
   ]
 })
-export class AppComponent {
+export class AppComponent{
   title = 'Password Manager';
   appStarted = false;
 
-  constructor(private configurationService: ConfigurationService, private messageService: MessageService) {
+  constructor(
+    private configurationService: ConfigurationService) {
   }
+
 
   @HostListener('window:beforeunload', ['$event'])
   async handleWindowBeforeUnload(event: Event) {
     event.preventDefault();
-    await this.configurationService.save().subscribe({
-      next: () => {
-        // TODO: Uncomment at the end
-        // this.configurationService.shutdownSignal().subscribe({
-        //   next: () => {
-        //     window.close();
-        //   }
-        // });
-      },
-
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed Action',
-          detail: 'The app couldn\'t exit safely. Please try again'
-        });
-      }
-    });
+    await this.configurationService.save().subscribe();
   }
 
   prepareRoute(outlet: RouterOutlet) {

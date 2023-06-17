@@ -7,7 +7,8 @@ public class ExceededQRCapacityException extends RuntimeException{
     private int exceedingCapacity;
 
     public ExceededQRCapacityException() {
-        super("[ERROR]: Maximum Capacity for QR exceeded, please choose less passwords\n");
+        super("Maximum Capacity for QR exceeded, please choose less passwords\n");
+        this.setStackTrace(new StackTraceElement[0]);
     }
 
     public int getExceedingCapacity() {

@@ -1,6 +1,6 @@
 package org.PasswordManager;
 
-import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -32,7 +32,7 @@ public class EncryptionAlgoTests {
         int ARGON2_THREAD_NUM = 4;
         int ARGON2_MEMORY = 1048576;
 
-        PasswordMetadata passParams = new PasswordMetadata(
+        PasswordConfiguration passParams = new PasswordConfiguration(
             "www.google.com",
             "CheckyCheckyCheckCheck",
             3,

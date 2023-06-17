@@ -1,7 +1,7 @@
 package org.PasswordManager;
 
 import org.PasswordManager.mapper.PasswordMapper;
-import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.PasswordManager.service.ConfigurationService;
 import org.PasswordManager.service.EncryptionService;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class EncryptionTests {
 
     @Test
     public void checkPasswordHashing() {
-        PasswordMetadata passParams = new PasswordMetadata(
+        PasswordConfiguration passParams = new PasswordConfiguration(
             "www.google.com",
             null,
             0,

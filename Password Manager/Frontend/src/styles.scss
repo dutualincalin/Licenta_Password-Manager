@@ -6,3 +6,13 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#uploadConfigContainer {
+  position: relative;
+
+  & .p-menu-overlay {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+}

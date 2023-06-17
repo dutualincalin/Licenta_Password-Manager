@@ -9,7 +9,7 @@ import {NotFoundPageComponent} from "./components/pages/not-found-page/not-found
 const routes: Routes = [
   {path: 'welcome', component: WelcomePageComponent, data: {animation: 'isLeft'}},
   {path: '',   redirectTo: '/welcome', pathMatch: 'full'},
-  {path: 'home', component:HomePageComponent},
+  {path: 'home', component: HomePageComponent},
   {path: 'newPassword', component: CreatePasswordPageComponent, data: {animation: 'isUp'}},
   {path: 'qr/:path', component: QrPageComponent, data: {animation: 'isRight'}},
   {path: '**', component: NotFoundPageComponent, data: {animation: 'isDown'}}

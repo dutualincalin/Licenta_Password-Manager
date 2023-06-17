@@ -1,90 +1,113 @@
 package org.PasswordManager.service;
 
-import org.PasswordManager.exceptions.ConfigurationIncompleteException;
+import lombok.extern.slf4j.Slf4j;
+import org.PasswordManager.exceptions.app.IncompleteAppConfigurationException;
+import org.PasswordManager.exceptions.app.DifferentAppConfigurationException;
 import org.PasswordManager.mapper.PasswordMapper;
-import org.PasswordManager.model.PasswordMetadata;
-import org.PasswordManager.utility.Utils;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 
+@Slf4j
 @Service
 public class ConfigurationService {
-    private String hashImg;
-
-    private final EncryptionService encryptionService;
+    private String configImgHash;
 
     private final IOService ioService;
+    private final EncryptionService encryptionService;
 
-    private final ConfigurationIncompleteException configurationIncompleteException;
+    private final DifferentAppConfigurationException differentAppConfigurationException;
+    private final IncompleteAppConfigurationException incompleteAppConfigurationException;
 
     public ConfigurationService(EncryptionService encryptionService,
                                 IOService ioService,
-                                ConfigurationIncompleteException configurationIncompleteException) {
+                                IncompleteAppConfigurationException incompleteAppConfigurationException,
+                                DifferentAppConfigurationException differentAppConfigurationException) {
         this.encryptionService = encryptionService;
         this.ioService = ioService;
-        this.configurationIncompleteException = configurationIncompleteException;
-        hashImg = null;
+        this.incompleteAppConfigurationException = incompleteAppConfigurationException;
+        this.differentAppConfigurationException = differentAppConfigurationException;
+        configImgHash = null;
     }
 
+
+    /**
+     ** Configuration image methods
+     ************************************************************************************/
+
     public void setConfigurationImage(String imgData) {
+        if(imgData.equals("")) {
+            throw incompleteAppConfigurationException;
+        }
+
         String pattern = "data:image/\\w+;base64,";
-        hashImg = encryptionService.encryptImage(imgData.replaceFirst(pattern, ""));
+        configImgHash = encryptionService.encryptImage(imgData.replaceFirst(pattern, ""));
     }
 
     public String getConfigurationImage() {
-        if(hashImg == null){
-            throw configurationIncompleteException;
+        if(configImgHash == null){
+            throw incompleteAppConfigurationException;
         }
 
-        return hashImg;
+        return configImgHash;
     }
 
-    public byte[] exportConfigToQR(
-        ArrayList<PasswordMetadata> passwordMetadataList
-    ) {
+
+    /**
+     ** QR data setting and getting methods
+     ************************************************************************************/
+
+    public byte[] exportConfigToQR(ArrayList<PasswordConfiguration> passwordConfigurationList) {
         String configuration = getConfigurationImage()
-            + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
-        String QRName  = "QR_" + Utils.QR_DATE_FORMAT.format(new Date()) + ".png";
+            + PasswordMapper.instance.passwordConfiguratonListToJSON(passwordConfigurationList);
 
-
-        ioService.createQR(encryptionService.encryptText(configuration), QRName);
-
-        return ioService.getImageData("./QRCodes/" + QRName);
+        return ioService.createQR(encryptionService.encryptText(configuration));
     }
 
-    public ArrayList<PasswordMetadata> readConfigFromQR(String QRPath) {
-        ArrayList<PasswordMetadata> passwordMetadataList;
-        String configuration = encryptionService.decryptText(ioService.readQR(QRPath));
+    public ArrayList<PasswordConfiguration> readConfigFromQR(String qrData) {
+        ArrayList<PasswordConfiguration> passwordConfigurationList;
+        String configuration = encryptionService.decryptText(qrData);
 
         try {
             String passMetaList = configuration.substring(configuration.indexOf("["));
+            String QRHashImg = configuration.substring(0, configuration.indexOf("["));
 
-            hashImg = configuration.substring(0, configuration.indexOf("["));
-            passwordMetadataList = PasswordMapper.instance.jsonToPasswordMetadataList(passMetaList);
-        }
-        catch(IndexOutOfBoundsException e) {
-            hashImg = configuration;
-            passwordMetadataList = new ArrayList<>();
+            if(configImgHash == null) {
+                this.configImgHash = QRHashImg;
+            } else {
+                if(!configImgHash.equals(QRHashImg)) {
+                    throw differentAppConfigurationException;
+                }
+            }
+
+            passwordConfigurationList = PasswordMapper.instance.jsonToPasswordConfigurationList(passMetaList);
+        } catch(IndexOutOfBoundsException e) {
+            configImgHash = configuration;
+            passwordConfigurationList = new ArrayList<>();
         }
 
-        return passwordMetadataList;
+        return passwordConfigurationList;
     }
 
-    public void saveConfiguration(ArrayList<PasswordMetadata> passwordMetadataList) {
+
+    /**
+     ** App configuration methods
+     ************************************************************************************/
+
+    public void saveConfiguration(ArrayList<PasswordConfiguration> passwordConfigurationList) {
         String configuration = getConfigurationImage()
-            + PasswordMapper.instance.passwordMetadataListToJSON(passwordMetadataList);
+            + PasswordMapper.instance.passwordConfiguratonListToJSON(passwordConfigurationList);
 
         ioService.saveConfigToFile(encryptionService.encryptText(configuration));
     }
 
-    public ArrayList<PasswordMetadata> gatherConfiguration() {
+    public ArrayList<PasswordConfiguration> gatherConfiguration() {
         String fileString = ioService.gatherConfigFromFile();
         String configuration = encryptionService.decryptText(fileString);
-        hashImg = configuration.substring(0, configuration.indexOf("["));
+        configImgHash = configuration.substring(0, configuration.indexOf("["));
 
-        return PasswordMapper.instance.jsonToPasswordMetadataList(
+        return PasswordMapper.instance.jsonToPasswordConfigurationList(
             configuration.substring(configuration.indexOf("["))
         );
     }

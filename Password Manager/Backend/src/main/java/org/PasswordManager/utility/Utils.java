@@ -10,6 +10,4 @@ public class Utils {
 
     public static final SimpleDateFormat DATE_FORMAT =
         new SimpleDateFormat("E dd.MM.yyyy HH:mm:ss.SSS");
-    public static final SimpleDateFormat QR_DATE_FORMAT =
-        new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss_SSS");
 }

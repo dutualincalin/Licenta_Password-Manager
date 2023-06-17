@@ -1,12 +1,11 @@
 package org.PasswordManager.service;
 
-import org.PasswordManager.exceptions.DuplicatePasswordMetadataException;
-import org.PasswordManager.exceptions.EmptyListException;
-import org.PasswordManager.exceptions.InternalServerErrorException;
-import org.PasswordManager.exceptions.MissingPasswordMetadataException;
-import org.PasswordManager.exceptions.PasswordGenerationException;
-import org.PasswordManager.exceptions.WrongPasswordMetadataExceptions;
-import org.PasswordManager.model.PasswordMetadata;
+import org.PasswordManager.exceptions.password.DuplicatePasswordConfigurationException;
+import org.PasswordManager.exceptions.password.EmptyPasswordConfigurationListException;
+import org.PasswordManager.exceptions.InternalServerException;
+import org.PasswordManager.exceptions.password.MissingPasswordConfigurationException;
+import org.PasswordManager.exceptions.WrongMetadataException;
+import org.PasswordManager.model.PasswordConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,120 +14,128 @@ import java.util.stream.Collectors;
 
 @Service
 public class PasswordService {
-
     private final EncryptionService encryptionService;
-
     private final ConfigurationService configurationService;
 
-    private ArrayList<PasswordMetadata> passwordMetadataList;
+    private ArrayList<PasswordConfiguration> passwordConfigurationList;
 
-    private final DuplicatePasswordMetadataException duplicatePasswordMetadataException;
-
-    private final WrongPasswordMetadataExceptions wrongPasswordMetadataExceptions;
-
-    private final InternalServerErrorException internalServerErrorException;
-
-    private final PasswordGenerationException passwordGenerationException;
-
-    private final EmptyListException emptyListException;
-
-    private final MissingPasswordMetadataException missingPasswordMetadataException;
+    private final EmptyPasswordConfigurationListException emptyPasswordConfigurationListException;
+    private final InternalServerException internalServerException;
+    private final WrongMetadataException wrongMetadataException;
+    private final MissingPasswordConfigurationException missingPasswordConfigurationException;
+    private final DuplicatePasswordConfigurationException duplicatePasswordConfigurationException;
 
     public PasswordService(EncryptionService encryptionService,
                            ConfigurationService configurationService,
-                           DuplicatePasswordMetadataException duplicatePasswordMetadataException,
-                           WrongPasswordMetadataExceptions wrongPasswordMetadataExceptions,
-                           InternalServerErrorException internalServerErrorException,
-                           PasswordGenerationException passwordGenerationException,
-                           EmptyListException emptyListException,
-                           MissingPasswordMetadataException missingPasswordMetadataException) {
+                           DuplicatePasswordConfigurationException duplicatePasswordConfigurationException,
+                           WrongMetadataException wrongMetadataException,
+                           InternalServerException internalServerException,
+                           EmptyPasswordConfigurationListException emptyPasswordConfigurationListException,
+                           MissingPasswordConfigurationException missingPasswordConfigurationException) {
         this.encryptionService = encryptionService;
         this.configurationService = configurationService;
-        this.duplicatePasswordMetadataException = duplicatePasswordMetadataException;
-        this.wrongPasswordMetadataExceptions = wrongPasswordMetadataExceptions;
-        this.internalServerErrorException = internalServerErrorException;
-        this.passwordGenerationException = passwordGenerationException;
-        this.emptyListException = emptyListException;
-        this.missingPasswordMetadataException = missingPasswordMetadataException;
-        passwordMetadataList = new ArrayList<>();
+        this.duplicatePasswordConfigurationException = duplicatePasswordConfigurationException;
+        this.wrongMetadataException = wrongMetadataException;
+        this.internalServerException = internalServerException;
+        this.emptyPasswordConfigurationListException = emptyPasswordConfigurationListException;
+        this.missingPasswordConfigurationException = missingPasswordConfigurationException;
+        passwordConfigurationList = new ArrayList<>();
     }
 
-    public void checkMetadata(PasswordMetadata passwordMetadata) {
-        if(passwordMetadata.getVersion() < 0
-            || passwordMetadata.getLength() < 16
-            || passwordMetadata.getWebsite() == null
-        ) {
-            throw wrongPasswordMetadataExceptions;
-        }
+
+    /**
+     ** Password Configuration List methods
+     ************************************************************************************/
+
+    public void setPasswordConfigurationList(
+        ArrayList<PasswordConfiguration> passwordsMetadataList)
+    {
+        this.passwordConfigurationList = passwordsMetadataList;
     }
 
-    public String generatePassword(String master, String id) {
-        PasswordMetadata passwordMetadata = this.passwordMetadataList.stream()
-            .filter(passwordMeta -> passwordMeta.getId().equals(id))
-            .findFirst().orElseThrow(MissingPasswordMetadataException::new);
-
-        String hash = encryptionService.encryptPassword(
-            configurationService.getConfigurationImage(),
-            passwordMetadata,
-            master
-        );
-
-        int index = hash.indexOf("$$") + 2;
-        if (index == 1) {
-            throw internalServerErrorException;
-        }
-
-        return hash.substring(index, index + passwordMetadata.getLength());
+    public ArrayList<PasswordConfiguration> getPasswordConfigurationList() {
+        return passwordConfigurationList;
     }
 
-    public void setPasswordMetadataList(ArrayList<PasswordMetadata> passwordsMetadataList) {
-        this.passwordMetadataList = passwordsMetadataList;
-    }
-
-    public ArrayList<PasswordMetadata> getPasswordMetadataList() {
-        return passwordMetadataList;
-    }
-
-    public void addPasswordsToMetadataList(ArrayList<PasswordMetadata> passwordMetadataList) {
-        passwordMetadataList.forEach(
+    public void addPasswordsToConfigurationList(
+        ArrayList<PasswordConfiguration> passwordConfigurationList)
+    {
+        passwordConfigurationList.forEach(
             passwordMetadata -> {
-                if (!this.passwordMetadataList.contains(passwordMetadata)) {
-                    this.passwordMetadataList.add(passwordMetadata);
+                if (!this.passwordConfigurationList.contains(passwordMetadata)) {
+                    this.passwordConfigurationList.add(passwordMetadata);
                 }
             }
         );
     }
 
-    public void addPasswordMetadata(PasswordMetadata passwordMetadata) {
-        checkMetadata(passwordMetadata);
 
-        if(passwordMetadataList.contains(passwordMetadata)) {
-            if(Objects.equals(passwordMetadata.getUsername(), "")){
+    /**
+    ** Password Configuration methods
+    ************************************************************************************/
+
+    public void addPasswordConfiguration(PasswordConfiguration passwordConfiguration) {
+        checkMetadata(passwordConfiguration);
+
+        if(passwordConfigurationList.contains(passwordConfiguration)) {
+            if(Objects.equals(passwordConfiguration.getUsername(), "")){
                 do {
-                    passwordMetadata.setVersion(passwordMetadata.getVersion() + 1);
-                } while(passwordMetadataList.contains(passwordMetadata));
+                    passwordConfiguration.setVersion(passwordConfiguration.getVersion() + 1);
+                } while(passwordConfigurationList.contains(passwordConfiguration));
             } else {
-                throw duplicatePasswordMetadataException;
+                throw duplicatePasswordConfigurationException;
             }
         }
 
-        passwordMetadataList.add(passwordMetadata);
+        passwordConfigurationList.add(passwordConfiguration);
     }
 
-    public void removePasswordMetadata(String id) {
-        if(passwordMetadataList.isEmpty()) {
-            throw emptyListException;
+    public void removePasswordConfiguration(String id) {
+        if(passwordConfigurationList.isEmpty()) {
+            throw emptyPasswordConfigurationListException;
         }
 
-        if(passwordMetadataList.stream().noneMatch(
+        if(passwordConfigurationList.stream().noneMatch(
             passwordMetadata -> passwordMetadata.getId().equals(id)
         )) {
-            throw missingPasswordMetadataException;
+            throw missingPasswordConfigurationException;
         }
 
-        passwordMetadataList = (ArrayList<PasswordMetadata>) passwordMetadataList
+        passwordConfigurationList = (ArrayList<PasswordConfiguration>) passwordConfigurationList
             .stream().filter(passwordMetadata -> !passwordMetadata.getId().equals(id))
-            .collect(
-                Collectors.toList());
+            .collect(Collectors.toList());
+    }
+
+    public String generatePassword(String master, String id) {
+        PasswordConfiguration passwordConfiguration = this.passwordConfigurationList.stream()
+            .filter(passwordMeta -> passwordMeta.getId().equals(id))
+            .findFirst().orElseThrow(MissingPasswordConfigurationException::new);
+
+        String hash = encryptionService.encryptPassword(
+            configurationService.getConfigurationImage(),
+            passwordConfiguration,
+            master
+        );
+
+        int index = hash.indexOf("$$") + 2;
+        if (index == 1) {
+            throw internalServerException;
+        }
+
+        return hash.substring(index, index + passwordConfiguration.getLength());
+    }
+
+
+    /**
+     ** Other methods
+     ************************************************************************************/
+
+    public void checkMetadata(PasswordConfiguration passwordConfiguration) {
+        if(passwordConfiguration.getVersion() < 0
+            || passwordConfiguration.getLength() < 16
+            || passwordConfiguration.getWebsite() == null
+        ) {
+            throw wrongMetadataException;
+        }
     }
 }

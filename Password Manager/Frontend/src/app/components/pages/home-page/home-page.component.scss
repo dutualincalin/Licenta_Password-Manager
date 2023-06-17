@@ -1,3 +1,7 @@
+h1, h3{
+  text-align: center;
+}
+
 #homeContainer {
   display: flex;
   align-items: center;
@@ -28,11 +32,18 @@ p-card.p-element {
   margin-bottom: 2.75vh;
 }
 
-#metadataList {
+#passwordConfigurationList {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   height: 77.5vh;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
 }
 
 ::ng-deep div.p-card{
@@ -52,4 +63,20 @@ p-card.p-element {
   padding-bottom: 0;
   height: 3.75vh;
   align-content: center;
+}
+
+#masterPassFooter {
+  text-align: left;
+
+  & > label {
+    font-size: 17px;
+  }
+
+  #masterPassTip {
+    font-size: 12px;
+  }
+}
+
+#generationSpinner {
+  font-size: 2rem;
 }

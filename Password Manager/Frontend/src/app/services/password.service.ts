@@ -1,14 +1,17 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
-import {PasswordMetadata} from "../objects/passwordMetadata";
+import {PasswordConfiguration} from "../objects/passwordConfiguration";
 import {Observable} from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class PasswordService {
   public resourceUrl = 'http://localhost:8080' + '/password';
 
-  constructor(protected http: HttpClient) {
-  }
+  constructor(protected http: HttpClient) {}
+
+  /**
+   ** Password Configuration administration methods
+   ************************************************************************************/
 
   create(passwordForm: {}): Observable<HttpResponse<void>> {
     return this.http.post<void>(
@@ -30,12 +33,17 @@ export class PasswordService {
     return this.http.delete<HttpResponse<{}>>(`${this.resourceUrl}/delPassMeta`, options);
   }
 
-  fetch():Observable<HttpResponse<PasswordMetadata[]>> {
-    return this.http.get<PasswordMetadata[]>(
+  fetch():Observable<HttpResponse<PasswordConfiguration[]>> {
+    return this.http.get<PasswordConfiguration[]>(
       `${this.resourceUrl}/getPassMetaList`,
       {observe: 'response', withCredentials: true}
     );
   }
+
+
+  /**
+   ** Password generation method
+   ************************************************************************************/
 
   generate(masterPass: string, id: string): Observable<HttpResponse<{[string: string]: any}>> {
     masterPass = masterPass.trim();

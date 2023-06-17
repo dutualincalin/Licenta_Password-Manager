@@ -10,8 +10,21 @@ export class ConfigurationService {
   constructor(protected http: HttpClient) {
   }
 
+  /**
+   ** CSRF protocol method
+   ************************************************************************************/
+
   init(): Observable<HttpResponse<{}>> {
     return this.http.get(`${this.resourceUrl}/getCSRF`, {observe: 'response', withCredentials:true});
+  }
+
+
+  /**
+   ** App Configuration methods
+   ************************************************************************************/
+
+  setImg(imgPath: {}): Observable<HttpResponse<void>> {
+    return this.http.post<void>(`${this.resourceUrl}/imgConfig`, imgPath, {observe: 'response',withCredentials:true});
   }
 
   gather(): Observable<HttpResponse<{}>> {
@@ -20,13 +33,5 @@ export class ConfigurationService {
 
   save(): Observable<HttpResponse<{}>> {
     return this.http.get(`${this.resourceUrl}/configSave`, {observe: 'response', withCredentials: true});
-  }
-
-  setImg(imgPath: {}): Observable<HttpResponse<void>> {
-    return this.http.post<void>(`${this.resourceUrl}/imgConfig`, imgPath, {observe: 'response',withCredentials:true});
-  }
-
-  shutdownSignal(): Observable<void> {
-    return this.http.get<void>(`${this.resourceUrl}/shutdown`,{withCredentials: true});
   }
 }

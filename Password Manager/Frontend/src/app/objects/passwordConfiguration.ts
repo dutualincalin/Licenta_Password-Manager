@@ -1,5 +1,5 @@
 
-export class PasswordMetadata {
+export class PasswordConfiguration {
   constructor(
     private _id: string,
     private _website: string,

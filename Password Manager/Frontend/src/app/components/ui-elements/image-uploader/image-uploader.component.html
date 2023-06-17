@@ -1,0 +1,32 @@
+<!--suppress AngularNgOptimizedImage -->
+<div id="imageDialog">
+  <div>
+    <img [src]="this.imgFileURL" alt="The preview of your selected picture will be shown here"/>
+  </div>
+
+  <div id="imageButtons">
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      styleClass="p-button-secondary"
+      (onClick)="this.imageCancelEvent.emit()"
+    >
+    </p-button>
+
+    <div>
+      <button pButton type="button" (click)="fileInput.click()" icon="pi pi-images" label="Select"></button>
+      <input type="file" accept="image/*" (change)="this.imageSelectEvent.emit($event)" #fileInput>
+    </div>
+
+    <p-button
+      label="Upload"
+      icon="pi pi-upload"
+      styleClass="p-button-danger"
+      (click)="this.imageUploadEvent.emit()"
+      [loading]="this.uploadLoading"
+      [disabled]="!this.imgFileURL || this.uploadLoading"
+      loadingIcon="pi pi-spin pi-spinner"
+    >
+    </p-button>
+  </div>
+</div>
