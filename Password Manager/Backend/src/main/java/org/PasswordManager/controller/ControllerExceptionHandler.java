@@ -88,14 +88,3 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 }
-
-
-// TODO: Write this in simple exception fields
-//@Override
-//public String toString() {
-//    StackTraceElement[] stackTrace = getStackTrace();
-//    if (stackTrace != null && stackTrace.length > 0) {
-//        return getClass().getName() + ": " + stackTrace[0].toString();
-//    }
-//    return super.toString();
-//}
