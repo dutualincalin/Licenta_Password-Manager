@@ -161,8 +161,6 @@ export class HomePageComponent{
   }
 
   checkMaster(): boolean {
-    let masterInput = document.getElementById("masterInput");
-
     if (this.master == "") {
       this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-invalid ng-dirty ng-touched";
       this.messageService.add({
