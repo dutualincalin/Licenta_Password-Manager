@@ -122,7 +122,15 @@ public class PasswordService {
             throw internalServerException;
         }
 
-        return hash.substring(index, index + passwordConfiguration.getLength());
+        hash = encryptionService.encodePassword(
+            hash.substring(index, index + passwordConfiguration.getLength())
+        );
+
+        while(hash.startsWith(".") || hash.startsWith("-")){
+            hash = hash.substring(1);
+        }
+
+        return hash;
     }
 
 

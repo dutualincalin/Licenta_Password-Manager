@@ -48,7 +48,6 @@ public class ConfigurationController {
         @Validated @RequestBody Map<String, String> payload
     ) {
         String imgData = payload.get("image");
-        log.warn(imgData);
         configurationService.setConfigurationImage(imgData);
         return ResponseEntity.status(200).build();
     }

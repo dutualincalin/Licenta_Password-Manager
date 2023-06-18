@@ -1,5 +1,6 @@
 package org.PasswordManager.service;
 
+import com.github.fzakaria.ascii85.Ascii85;
 import org.PasswordManager.model.PasswordConfiguration;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -41,7 +42,7 @@ public class EncryptionService {
             ARGON2_HASH_ITERATIONS
         );
 
-        textEncryptor = Encryptors.text(token + "config", TEXT_SALT);
+        textEncryptor = Encryptors.delux(token + "config", TEXT_SALT);
     }
 
 
@@ -56,6 +57,10 @@ public class EncryptionService {
     public String encryptPassword(String imgHash, PasswordConfiguration passwordConfiguration, String master) {
         return argon2PasswordEncoder
             .encode(imgHash + passwordConfiguration.toString() + master);
+    }
+
+    public String encodePassword(String password) {
+        return Ascii85.encode(password.getBytes());
     }
 
     public String encryptText(String text) {
