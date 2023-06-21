@@ -6,7 +6,7 @@ import {PasswordConfiguration} from "../objects/passwordConfiguration";
 
 @Injectable({providedIn: 'root'})
 export class QrService{
-  private resourceUrl = 'http://localhost:8080' + '/qr';
+  private resourceUrl = 'https://localhost:8443' + '/qr';
 
   constructor(protected http: HttpClient) {
   }

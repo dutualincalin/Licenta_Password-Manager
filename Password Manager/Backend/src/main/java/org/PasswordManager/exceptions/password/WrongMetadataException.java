@@ -1,4 +1,4 @@
-package org.PasswordManager.exceptions;
+package org.PasswordManager.exceptions.password;
 
 import org.springframework.stereotype.Component;
 

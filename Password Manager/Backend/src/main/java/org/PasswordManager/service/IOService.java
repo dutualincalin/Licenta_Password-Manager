@@ -7,7 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.PasswordManager.exceptions.ExceededQRCapacityException;
 import org.PasswordManager.exceptions.InternalServerException;
-import org.PasswordManager.exceptions.WrongFilePathException;
+import org.PasswordManager.exceptions.app.MissingConfigurationException;
 import org.PasswordManager.utility.Utils;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +21,15 @@ import java.util.Scanner;
 
 @Service
 public class IOService {
-    private final WrongFilePathException wrongFilePathException;
+    private final MissingConfigurationException missingConfigurationException;
     private final ExceededQRCapacityException exceededQRCapacityException;
     private final InternalServerException internalServerException;
 
 
-    public IOService(WrongFilePathException wrongFilePathException,
+    public IOService(MissingConfigurationException missingConfigurationException,
                      InternalServerException internalServerException,
                      ExceededQRCapacityException exceededQRCapacityException) {
-        this.wrongFilePathException = wrongFilePathException;
+        this.missingConfigurationException = missingConfigurationException;
         this.internalServerException = internalServerException;
         this.exceededQRCapacityException = exceededQRCapacityException;
     }
@@ -53,7 +53,7 @@ public class IOService {
             Scanner scanner = new Scanner(new File(Utils.CONFIG_FILE_NAME));
             return scanner.nextLine();
         } catch (FileNotFoundException e) {
-            throw wrongFilePathException;
+            throw missingConfigurationException;
         }
     }
 

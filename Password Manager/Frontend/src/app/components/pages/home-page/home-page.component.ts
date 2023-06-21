@@ -161,12 +161,13 @@ export class HomePageComponent{
   }
 
   checkMaster(): boolean {
-    if (this.master == "") {
+    let pattern = new RegExp(/[A-Za-z0-9_ ]+/);
+    if (!pattern.test(this.master)) {
       this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-invalid ng-dirty ng-touched";
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Master Password is empty',
+        detail: 'Master Password is empty or doesn\'t use alphanumeric characters, underline and space only',
         sticky: true
       });
       return false;

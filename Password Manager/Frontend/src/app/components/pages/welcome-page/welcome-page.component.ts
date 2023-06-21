@@ -78,7 +78,7 @@ export class WelcomePageComponent implements OnInit{
       },
 
       error: err => {
-        if (err.status == 400) {
+        if (err.status == 404) {
           this.progressBarLoading = 50;
           this.loadingShow = false;
           this.imgLoaded = false;

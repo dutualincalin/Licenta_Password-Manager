@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.Date;
 
 @SpringBootTest
@@ -30,7 +29,6 @@ public class ConfigurationTests {
         passwordService.addPasswordConfiguration(new PasswordConfiguration("www.pinterest.com", "pinterestGuy", 0,64, new Date()));
         passwordService.addPasswordConfiguration(new PasswordConfiguration("www.twitter.com", "Elon Musk", 0,64, new Date()));
 
-
         configurationService.saveConfiguration(passwordService.getPasswordConfigurationList());
         System.out.println(configurationService.getConfigurationImage()
             + PasswordMapper.instance.passwordConfiguratonListToJSON(passwordService.getPasswordConfigurationList())
@@ -42,19 +40,5 @@ public class ConfigurationTests {
         System.out.println(configurationService.getConfigurationImage()
             + PasswordMapper.instance.passwordConfiguratonListToJSON(passwordService.getPasswordConfigurationList())
         );
-    }
-
-    @Test
-    public void testQRWriting() {
-        configurationService.setConfigurationImage("./NFS.jpg");
-        passwordService.addPasswordConfiguration(new PasswordConfiguration("www.facebook.com", "facebookUser", 0,16, new Date()));
-        passwordService.addPasswordConfiguration(new PasswordConfiguration("www.pinterest.com", "pinterestGuy", 0,64, new Date()));
-        passwordService.addPasswordConfiguration(new PasswordConfiguration("www.twitter.com", "Elon Musk", 0,64, new Date()));
-
-        System.out.println(configurationService.getConfigurationImage()
-            + PasswordMapper.instance.passwordConfiguratonListToJSON(passwordService.getPasswordConfigurationList())
-        );
-        System.out.println(Arrays.toString(
-            configurationService.exportConfigToQR(passwordService.getPasswordConfigurationList())));
     }
 }

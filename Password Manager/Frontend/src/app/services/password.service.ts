@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class PasswordService {
-  public resourceUrl = 'http://localhost:8080' + '/password';
+  private resourceUrl = 'https://localhost:8443' + '/password';
 
   constructor(protected http: HttpClient) {}
 

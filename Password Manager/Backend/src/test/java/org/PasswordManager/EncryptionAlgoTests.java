@@ -1,7 +1,10 @@
 package org.PasswordManager;
 
 import org.PasswordManager.model.PasswordConfiguration;
+import org.PasswordManager.service.EncryptionService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -10,6 +13,9 @@ import java.util.Date;
 
 @SpringBootTest
 public class EncryptionAlgoTests {
+    @Autowired
+    EncryptionService encryptionService;
+
     @Test
     public void checkPBKDF2Algo() {
         int PBKDF2_HASH_ITERATIONS = 500;
@@ -22,7 +28,10 @@ public class EncryptionAlgoTests {
         );
 
         pbkdf2PasswordEncoder.setEncodeHashAsBase64(true);
-        System.out.println(pbkdf2PasswordEncoder.encode("password"));
+        Assertions.assertNotEquals(
+            pbkdf2PasswordEncoder.encode("password"),
+            pbkdf2PasswordEncoder.encode("password")
+        );
     }
 
     @Test
@@ -49,8 +58,29 @@ public class EncryptionAlgoTests {
         );
 
         String startHash = passParams.toString();
-        System.out.println(argon2PasswordEncoder.encode(
-            "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==" +
-                "NotIdealForYOU" + startHash));
+
+        Assertions.assertEquals(
+            argon2PasswordEncoder.encode(
+                "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==" +
+                    "NotIdealForYOU" + startHash),
+            argon2PasswordEncoder.encode(
+                "81Dz7E1M/X5/wPVaLVgA/xg71p8tWHOvuTnVlhAjamPOJIGUAX8x1Q==" +
+                    "NotIdealForYOU" + startHash)
+        );
+    }
+
+    @Test
+    public void checkAESAlgo() {
+        String testString = "TestingString";
+
+        Assertions.assertNotEquals(
+            encryptionService.encryptText(testString),
+            encryptionService.encryptText(testString)
+        );
+
+        Assertions.assertEquals(
+            testString,
+            encryptionService.decryptText(encryptionService.encryptText(testString))
+        );
     }
 }

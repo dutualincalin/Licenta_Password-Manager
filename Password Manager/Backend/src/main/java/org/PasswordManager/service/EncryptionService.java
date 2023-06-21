@@ -19,9 +19,9 @@ public class EncryptionService {
         int PBKDF2_HASH_SIZE = 256;
 
         int ARGON2_HASH_ITERATIONS = 10;
-        int ARGON2_HASH_SIZE = 64;
+        int ARGON2_HASH_SIZE = 128;
         int ARGON2_THREAD_NUM = 4;
-        int ARGON2_MEMORY = 262144;
+        int ARGON2_MEMORY = 65536;
 
         String token = "reganaMdrowssaP";
         String TEXT_SALT = "53616c747953616c7479726567616e614d64726f777373615053616c7453616c74";

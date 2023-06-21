@@ -8,8 +8,9 @@ import org.PasswordManager.exceptions.password.EmptyPasswordConfigurationListExc
 import org.PasswordManager.exceptions.ExceededQRCapacityException;
 import org.PasswordManager.exceptions.InternalServerException;
 import org.PasswordManager.exceptions.password.MissingPasswordConfigurationException;
-import org.PasswordManager.exceptions.WrongMetadataException;
-import org.PasswordManager.exceptions.WrongFilePathException;
+import org.PasswordManager.exceptions.password.WrongMasterPasswordException;
+import org.PasswordManager.exceptions.password.WrongMetadataException;
+import org.PasswordManager.exceptions.app.MissingConfigurationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,12 +53,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
-        WrongFilePathException.class,
-        DuplicatePasswordConfigurationException.class,
         WrongMetadataException.class,
-        EmptyPasswordConfigurationListException.class,
+        WrongMasterPasswordException.class,
+        DifferentAppConfigurationException.class,
         MissingPasswordConfigurationException.class,
-        DifferentAppConfigurationException.class
+        DuplicatePasswordConfigurationException.class,
+        EmptyPasswordConfigurationListException.class,
     })
     public final ResponseEntity<Object> handleBadRequestExceptions(
         Exception exception,
@@ -69,6 +70,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
             exception.getMessage(),
             new HttpHeaders(),
             HttpStatus.BAD_REQUEST,
+            request
+        );
+    }
+
+    @ExceptionHandler(MissingConfigurationException.class)
+    public final ResponseEntity<Object> handleMissingConfigurationException(
+        Exception exception,
+        WebRequest request
+    ) {
+        log.warn(exception.getMessage(), exception);
+        return handleExceptionInternal(
+            exception,
+            exception.getMessage(),
+            new HttpHeaders(),
+            HttpStatus.NOT_FOUND,
             request
         );
     }

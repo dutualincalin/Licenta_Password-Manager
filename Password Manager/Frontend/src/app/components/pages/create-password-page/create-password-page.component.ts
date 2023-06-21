@@ -25,7 +25,7 @@ export class CreatePasswordPageComponent{
   }
 
   checkUsername(): boolean {
-    let usernameRegex = new RegExp("^[A-Za-z][A-Za-z0-9_]{0,20}$");
+    let usernameRegex = new RegExp("^[A-Za-z][A-Za-z0-9_ ]{0,20}$");
 
     if(usernameRegex.test(this.username) || this.username == ""){
       this.formUsername.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
@@ -71,7 +71,7 @@ export class CreatePasswordPageComponent{
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'The Username input has more than 20 characters!',
+        detail: 'The Username input has more than 20 characters or uses non-alphanumeric input!',
         sticky: true
       });
     }

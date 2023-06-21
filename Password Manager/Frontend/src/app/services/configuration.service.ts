@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 @Injectable({providedIn: "root"})
 export class ConfigurationService {
-  private resourceUrl = 'http://localhost:8080' + '/config';
+  private resourceUrl = 'https://localhost:8443' + '/config';
 
   constructor(protected http: HttpClient) {
   }
