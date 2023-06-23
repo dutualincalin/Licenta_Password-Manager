@@ -38,8 +38,8 @@ public class EncryptionAlgoTests {
     public void checkARGON2Algo() {
         int ARGON2_HASH_ITERATIONS = 10;
         int ARGON2_HASH_SIZE = 64;
-        int ARGON2_THREAD_NUM = 4;
-        int ARGON2_MEMORY = 1048576;
+        int ARGON2_THREAD_NUM = 8;
+        int ARGON2_MEMORY = 65536;
 
         PasswordConfiguration passParams = new PasswordConfiguration(
             "www.google.com",

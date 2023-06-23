@@ -150,6 +150,8 @@ public class PasswordService {
             hash = hash.substring(1);
         }
 
+        hash = hash.substring(0, passwordConfiguration.getLength());
+
         return hash;
     }
 
@@ -160,9 +162,11 @@ public class PasswordService {
 
     public void checkMetadata(PasswordConfiguration passwordConfiguration) {
         if(passwordConfiguration.getVersion() < 0
-            || (passwordConfiguration.getUsername() != null
+            || (!Objects.equals(passwordConfiguration.getUsername(), "")
                 && !usernamePattern.matcher(passwordConfiguration.getUsername()).matches())
             || !websitePattern.matcher(passwordConfiguration.getWebsite()).matches()
+            || passwordConfiguration.getLength() < 16
+            || passwordConfiguration.getLength() > 64
         ) {
             throw wrongMetadataException;
         }

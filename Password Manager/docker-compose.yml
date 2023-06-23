@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  password-manager-server:
+    build: Backend
+    image: password-manager-server
+    ports:
+      - '8443:8443'
+    volumes:
+      - backend-data:/var/lib/password-manager-server
+    networks:
+      spring-angular:
+        aliases:
+          - spring
+
+  password-manager-client:
+    build: Frontend
+    image: password-manager-client
+    ports:
+      - '4200:4200'
+    networks:
+      spring-angular:
+        aliases:
+            - angular
+
+
+volumes:
+  backend-data:
+
+networks:
+  spring-angular:

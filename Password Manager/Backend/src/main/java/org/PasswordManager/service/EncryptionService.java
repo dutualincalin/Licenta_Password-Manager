@@ -20,7 +20,7 @@ public class EncryptionService {
 
         int ARGON2_HASH_ITERATIONS = 10;
         int ARGON2_HASH_SIZE = 128;
-        int ARGON2_THREAD_NUM = 4;
+        int ARGON2_THREAD_NUM = 8;
         int ARGON2_MEMORY = 65536;
 
         String token = "reganaMdrowssaP";
