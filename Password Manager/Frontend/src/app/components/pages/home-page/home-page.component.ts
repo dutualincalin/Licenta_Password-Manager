@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {Router} from "@angular/router";
 import {PasswordConfiguration} from "../../../objects/passwordConfiguration";
 import {ConfirmationService, MessageService} from "primeng/api";
@@ -8,6 +8,7 @@ import {ConfigurationService} from "../../../services/configuration.service";
 import {PasswordService} from "../../../services/password.service";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {QrService} from "../../../services/qr.service";
+import {ConfirmDialog} from "primeng/confirmdialog";
 
 @Component({
   selector: 'app-home-page',
@@ -16,8 +17,6 @@ import {QrService} from "../../../services/qr.service";
   animations: [fadeInOut]
 })
 export class HomePageComponent{
-  @ViewChild('masterInput') masterInput: ElementRef<HTMLInputElement>;
-
   passwordMetadataList: PasswordConfiguration[] = [];
   filteredPasswords: PasswordConfiguration[] = [];
   selectedPasswords: PasswordConfiguration[] = [];
@@ -92,11 +91,12 @@ export class HomePageComponent{
             this.master = '';
           },
 
-          error: () => {
+          error: err => {
             this.messageService.add({
               severity: 'error',
               summary: 'Generation Failed',
-              detail: 'An error has occurred. Please try again!'
+              detail: typeof err.error === "string" ? err.error : "Generation failed, is the server on?",
+              life: 5000
             });
             this.showMasterPasswordDialog = false;
           }
@@ -117,11 +117,14 @@ export class HomePageComponent{
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.passwordService.delete(passwordMetadata.id).subscribe({
+
           error: err => {
+            console.log(err);
             this.messageService.add({
               severity: 'error',
               summary: 'Delete error',
-              detail: err.error
+              detail: typeof err.error === "string" ? err.error : "The delete action failed, is the server on?",
+              life: 5000
             });
           },
 
@@ -160,20 +163,22 @@ export class HomePageComponent{
     })
   }
 
-  checkMaster(): boolean {
-    let pattern = new RegExp(/[A-Za-z0-9_ ]+/);
+  checkMaster(dialog: ConfirmDialog) {
+    let pattern = new RegExp(/^[A-Za-z0-9_ ]+$/);
+    // @ts-ignore
+    let masterInput: HTMLElement = document.getElementById("masterInput");
+
+    console.log(masterInput)
     if (!pattern.test(this.master)) {
-      this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-invalid ng-dirty ng-touched";
+      masterInput.className = masterInput.className.replace("ng-valid",  "ng-invalid ng-dirty");
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Master Password is empty or doesn\'t use alphanumeric characters, underline and space only',
-        sticky: true
+        life: 5000
       });
-      return false;
     } else {
-      this.masterInput.nativeElement.className = "p-inputtext p-component p-element ng-pristine ng-valid ng-touched";
-      return true;
+      dialog.accept();
     }
   }
 
@@ -188,8 +193,31 @@ export class HomePageComponent{
         this.messageService.add({
           severity: 'error',
           summary: 'Export error',
-          detail: err.error
+          detail: typeof err.error === "string" ? err.error : "The export action failed, is the server on?",
         });
+      }
+    });
+  }
+
+  QRImport($event: string) {
+    this.uploadingQR = true;
+
+    this.qrService.readQR($event).subscribe({
+      next: () => {
+        this.showQRImportDialogue = false;
+        this.uploadingQR = false;
+        this.fetchPasswordMetadataList();
+      },
+
+      error: err => {
+        this.uploadingQR = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: typeof err.error === "string" ? err.error : "The import action failed, is the server on?",
+          life: 5000
+        });
+        this.startQRImportingEvent.emit();
       }
     });
   }
@@ -240,28 +268,5 @@ export class HomePageComponent{
 
   QRCancel() {
     this.showQRImportDialogue = false;
-  }
-
-  QRImport($event: string) {
-    this.uploadingQR = true;
-
-    this.qrService.readQR($event).subscribe({
-      next: () => {
-        this.showQRImportDialogue = false;
-        this.uploadingQR = false;
-        this.fetchPasswordMetadataList();
-      },
-
-      error: err => {
-        this.uploadingQR = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error,
-          sticky: true
-        });
-        this.startQRImportingEvent.emit();
-      }
-    });
   }
 }

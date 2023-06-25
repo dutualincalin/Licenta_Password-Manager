@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  password-manager-server:
+    image: calin426/licenta:server
+    ports:
+      - '8443:8443'
+    volumes:
+      - backend-data:/var/lib/password-manager-server
+    networks:
+      spring-angular:
+        aliases:
+          - spring
+
+  password-manager-client:
+    image: calin426/licenta:client
+    ports:
+      - '4200:4200'
+    networks:
+      spring-angular:
+        aliases:
+            - angular
+
+
+volumes:
+  backend-data:
+
+networks:
+  spring-angular:

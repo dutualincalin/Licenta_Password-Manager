@@ -55,7 +55,7 @@ public class PasswordService {
         );
 
         usernamePattern = Pattern.compile("^[A-Za-z][A-Za-z0-9_ ]{0,20}$");
-        masterPasswordPattern = Pattern.compile("[A-Za-z0-9_ ]+");
+        masterPasswordPattern = Pattern.compile("^[A-Za-z0-9_ ]+$");
     }
 
 

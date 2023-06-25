@@ -96,7 +96,7 @@
     <ng-container *ngIf="this.showMasterPasswordDialog">
       <div id="masterPassFooter">
         <label>Master Password</label><br>
-        <input #masterInput pInputText [(ngModel)]="this.master"/> <br>
+        <p-password id="masterInput" [(ngModel)]="this.master" [feedback]="false" inputId="masterInnerInput"/> <br>
         <label id="masterPassTip">Insert your master password here.</label>
 
         <br>
@@ -106,7 +106,7 @@
 
         <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="dialog.reject()"></button>
         <button type="button" pButton icon="pi pi-wrench" label="Generate"
-          (click)="this.checkMaster() && dialog.accept()"
+          (click)="this.checkMaster(dialog)"
         ></button>
       </div>
     </ng-container>
@@ -133,11 +133,13 @@
     <ng-container *ngIf="this.generatedPassword.length > 0">
       <h6>Password has been generated successfully!</h6>
       <br>
-      <input pInputText type="text" disabled=true [(ngModel)]="this.generatedPassword"/>
+      <p-password [disabled]="true" [(ngModel)]="this.generatedPassword" inputId="generatedPasswordInput"/>
 
       <p-button
         icon="pi pi-copy"
         styleclass="p-button-rounded p-button-text p-button-raised"
+        pTooltip="Press to copy the password"
+        tooltipPosition="right"
         (onClick)="this.copyToClipboard()">
       </p-button>
     </ng-container>

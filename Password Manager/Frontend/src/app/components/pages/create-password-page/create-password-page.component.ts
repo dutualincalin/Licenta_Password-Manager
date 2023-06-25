@@ -26,12 +26,13 @@ export class CreatePasswordPageComponent{
 
   checkUsername(): boolean {
     let usernameRegex = new RegExp("^[A-Za-z][A-Za-z0-9_ ]{0,20}$");
+    let oldClass = this.formUsername.nativeElement.className;
 
     if(usernameRegex.test(this.username) || this.username == ""){
-      this.formUsername.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
+      this.formUsername.nativeElement.className = oldClass.replace("ng-invalid ng-dirty", "ng-valid");
       return true;
     } else {
-      this.formUsername.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      this.formUsername.nativeElement.className = oldClass.replace("ng-valid", "ng-invalid ng-dirty");
       return false;
     }
   }
@@ -39,22 +40,25 @@ export class CreatePasswordPageComponent{
   checkWebsite(): boolean {
     let websiteRegex=
       new RegExp(/^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]+.[a-z]{2,3}(\/[a-z]+)*$/);
+    let oldClass = this.formWebsite.nativeElement.className;
 
     if(websiteRegex.test(this.website)) {
-      this.formWebsite.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched";
+      this.formWebsite.nativeElement.className = oldClass.replace("ng-invalid ng-dirty", "ng-valid");
       return true;
     } else {
-      this.formWebsite.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      this.formWebsite.nativeElement.className = oldClass.replace("ng-valid", "ng-invalid ng-dirty");
       return false;
     }
   }
 
   checkVersion(): boolean {
+    let oldClass = this.formVersion.nativeElement.className;
+
     if (this.version != null && this.version > -1) {
-      this.formVersion.nativeElement.className = "p-inputtext p-component p-element ng-valid p-filled ng-touched"
+      this.formVersion.nativeElement.className = oldClass.replace("ng-invalid ng-dirty", "ng-valid");
       return true;
     } else {
-      this.formVersion.nativeElement.className = "p-inputtext p-component p-element ng-invalid p-filled ng-dirty ng-touched";
+      this.formVersion.nativeElement.className = oldClass.replace("ng-valid", "ng-invalid ng-dirty");
       return false;
     }
   }
@@ -72,7 +76,7 @@ export class CreatePasswordPageComponent{
         severity: 'error',
         summary: 'Error',
         detail: 'The Username input has more than 20 characters or uses non-alphanumeric input!',
-        sticky: true
+        life: 6000
       });
     }
 
@@ -82,7 +86,7 @@ export class CreatePasswordPageComponent{
         severity: 'error',
         summary: 'Error',
         detail: 'The Website input doesn\'t match the pattern!',
-        sticky: true
+        life: 5500
       });
     }
 
@@ -91,8 +95,8 @@ export class CreatePasswordPageComponent{
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'The version input is negative!',
-        sticky: true
+        detail: 'The version input is a negative number!',
+        life: 5000
       });
     }
 
@@ -118,8 +122,8 @@ export class CreatePasswordPageComponent{
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: err.error,
-          sticky: true
+          detail: typeof err.error === "string" ? err.error : "The creating action failed, is the server on?",
+          life: 5000
         });
       }
     });

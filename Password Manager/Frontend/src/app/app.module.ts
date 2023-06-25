@@ -11,7 +11,7 @@ import { CreatePasswordPageComponent } from './components/pages/create-password-
 import { QrPageComponent } from './components/pages/qr-page/qr-page.component';
 import { NotFoundPageComponent } from './components/pages/not-found-page/not-found-page.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NgOptimizedImage} from "@angular/common";
+import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {ButtonModule} from "primeng/button";
 import {CardModule} from "primeng/card";
 import {TooltipModule} from "primeng/tooltip";
@@ -40,6 +40,7 @@ import { QrScannerComponent } from './components/ui-elements/qr-scanner/qr-scann
 import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 import {MenuModule} from "primeng/menu";
 import { ImageUploaderComponent } from './components/ui-elements/image-uploader/image-uploader.component';
+import {PasswordModule} from "primeng/password";
 
 @NgModule({
   declarations: [
@@ -54,39 +55,41 @@ import { ImageUploaderComponent } from './components/ui-elements/image-uploader/
     QrScannerComponent,
     ImageUploaderComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    NgOptimizedImage,
-    ButtonModule,
-    CardModule,
-    TooltipModule,
-    PanelModule,
-    DividerModule,
-    InputTextModule,
-    FormsModule,
-    SliderModule,
-    MatSliderModule,
-    KeyFilterModule,
-    MenubarModule,
-    FieldsetModule,
-    ToastModule,
-    ConfirmDialogModule,
-    StyleClassModule,
-    PaginatorModule,
-    CheckboxModule,
-    OverlayPanelModule,
-    HttpClientModule,
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'XSRF-TOKEN',
-      headerName: 'X-XSRF-TOKEN'
-    }),
-    DialogModule,
-    RippleModule,
-    MenuModule,
-    NgxScannerQrcodeModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        NgOptimizedImage,
+        ButtonModule,
+        CardModule,
+        TooltipModule,
+        PanelModule,
+        DividerModule,
+        InputTextModule,
+        FormsModule,
+        SliderModule,
+        MatSliderModule,
+        KeyFilterModule,
+        MenubarModule,
+        FieldsetModule,
+        ToastModule,
+        ConfirmDialogModule,
+        StyleClassModule,
+        PaginatorModule,
+        CheckboxModule,
+        OverlayPanelModule,
+        HttpClientModule,
+        HttpClientXsrfModule.withOptions({
+            cookieName: 'XSRF-TOKEN',
+            headerName: 'X-XSRF-TOKEN'
+        }),
+        DialogModule,
+        RippleModule,
+        MenuModule,
+        NgxScannerQrcodeModule,
+        PasswordModule,
+        CommonModule
+    ],
   providers: [
     ConfirmationService,
     MessageService,

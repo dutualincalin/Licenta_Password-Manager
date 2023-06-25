@@ -4,6 +4,7 @@ import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.Refill;
+import lombok.extern.slf4j.Slf4j;
 import org.PasswordManager.model.PasswordConfiguration;
 import org.PasswordManager.service.PasswordService;
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Duration;
 import java.util.ArrayList;
 
+@Slf4j
 @RestController
 @RequestMapping("/password")
 public class PasswordController {
@@ -29,8 +31,8 @@ public class PasswordController {
     private final Bucket bucket;
 
     public PasswordController(PasswordService passwordService) {
-        Bandwidth limit = Bandwidth.classic(20, Refill
-            .greedy(20, Duration.ofMinutes(1))
+        Bandwidth limit = Bandwidth.classic(10, Refill
+            .intervally(2, Duration.ofMinutes(1))
         );
 
         this.bucket = Bucket4j.builder().addLimit(limit).build();
@@ -81,6 +83,7 @@ public class PasswordController {
             );
         }
 
+        log.warn("Limit reached");
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 }

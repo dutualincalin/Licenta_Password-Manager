@@ -80,3 +80,11 @@ p-card.p-element {
 #generationSpinner {
   font-size: 2rem;
 }
+
+::ng-deep #masterInnerInput {
+  width: 45vw;
+}
+
+::ng-deep #generatedPasswordInput {
+  width: 16vw;
+}

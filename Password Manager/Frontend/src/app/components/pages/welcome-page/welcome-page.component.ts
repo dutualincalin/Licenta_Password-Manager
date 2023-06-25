@@ -83,6 +83,15 @@ export class WelcomePageComponent implements OnInit{
           this.loadingShow = false;
           this.imgLoaded = false;
         }
+
+        else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'The client can\'t connect to the server, please refresh the page or restart the app in Docker',
+            sticky: true
+          })
+        }
       }
     });
   }
@@ -129,8 +138,7 @@ export class WelcomePageComponent implements OnInit{
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Something went wrong. Please try again!',
-              sticky: true
+              detail: 'The image failed to upload. Please try again!',
             });
           }
         });
@@ -159,7 +167,7 @@ export class WelcomePageComponent implements OnInit{
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Something went wrong. Please try again!',
+          detail: 'The QR Code failed to upload. Please try again!',
           sticky: true
         });
 
