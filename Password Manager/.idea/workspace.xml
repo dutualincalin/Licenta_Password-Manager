@@ -7,10 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a19102ae-d77d-454a-a86e-eba0fcb14d89" name="Changes" comment="Implementation finished">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Prezentare Milestone.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/../Prezentare Milestone.pptx" afterDir="false" />
-    </list>
+    <list default="true" id="a19102ae-d77d-454a-a86e-eba0fcb14d89" name="Changes" comment="Implementation finished" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -283,6 +280,7 @@
       <workItem from="1687619837126" duration="6430000" />
       <workItem from="1687704769054" duration="11619000" />
       <workItem from="1687987047272" duration="672000" />
+      <workItem from="1688014220220" duration="663000" />
     </task>
     <task id="LOCAL-00001" summary="Added frontend project">
       <created>1685825385271</created>
